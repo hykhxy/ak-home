@@ -17,21 +17,57 @@ const dur = ms => RM ? 1 : ms;
 const stage = $('#stage');
 /* 桌面:固定 1920×1080 等比缩放。手机(窄竖屏):舞台宽约 420 设计像素、高随屏幕,走 body.mob 的竖向布局(见 css 末尾) */
 const MOB_W = 420, MOB_MIN_H = 600;
-const isMob = () => innerWidth <= 900 && innerWidth / innerHeight <= 1;
+const isPortrait = () => innerWidth <= 900 && innerWidth / innerHeight <= 1;
+/* 三种模式:桌面/横屏(1920×1080) · 手机竖屏(body.mob) · 手机竖屏下点「公开招募」后的旋转横屏(body.rot,把 1920×1080 舞台顺时针转 90°) */
+let land = false, locked = false;
 function fit() {
-  const m = isMob();
-  document.body.classList.toggle('mob', m);
+  const p = isPortrait(), b = document.body;
+  if (!p && !locked) land = false;
+  const rot = p && land, m = p && !land;
+  b.classList.toggle('mob', m); b.classList.toggle('rot', rot); b.classList.toggle('lk', locked);
+  const rb = document.getElementById('rotBack'); if (rb) rb.textContent = locked ? '↺ 退出横屏' : '↺ 恢复竖屏';
   if (m) {
     const s = Math.min(innerWidth / MOB_W, innerHeight / MOB_MIN_H);
     stage.style.width = (innerWidth / s) + 'px'; stage.style.height = (innerHeight / s) + 'px';
     stage.style.transform = `translate(-50%,-50%) scale(${s})`;
+  } else if (rot) {
+    stage.style.width = stage.style.height = '';
+    stage.style.transform = `translate(-50%,-50%) rotate(90deg) scale(${Math.min(innerHeight / 1920, innerWidth / 1080)})`;
   } else {
     stage.style.width = stage.style.height = '';
     stage.style.transform = `translate(-50%,-50%) scale(${Math.min(innerWidth / 1920, innerHeight / 1080)})`;
   }
 }
-addEventListener('resize', fit); fit();
-AK.isMob = isMob;
+addEventListener('resize', fit);
+/* 「恢复竖屏」按钮(在舞台内,随舞台一起旋转) */
+const rotBack = document.createElement('button'); rotBack.id = 'rotBack'; rotBack.type = 'button'; rotBack.dataset.act = 'rotate'; rotBack.textContent = '↺ 恢复竖屏';
+stage.appendChild(rotBack);
+fit();
+AK.isMob = () => document.body.classList.contains('mob');
+AK.isPortrait = isPortrait;
+AK.isLand = () => land || locked;
+AK.unrotate = () => {
+  land = false;
+  if (locked) { try { screen.orientation.unlock(); } catch (e) {} locked = false; }
+  try { if (document.fullscreenElement) document.exitFullscreen(); } catch (e) {}
+  fit();
+};
+/* 点击横屏:优先"全屏 + 锁定横向"(Android Chrome 等);不支持/被沙盒拒绝时,退回到 CSS 旋转 */
+AK.rotate = async () => {
+  if (land || locked) { AK.unrotate(); AK.toast('已恢复竖屏'); return; }
+  if (!isPortrait()) { AK.toast('当前已是横屏显示'); return; }
+  land = true; fit();
+  AK.toast('已切换横屏 · 点右上「恢复竖屏」可还原');
+  try {
+    const de = document.documentElement;
+    if (!document.fullscreenElement && de.requestFullscreen) await de.requestFullscreen({ navigationUI: 'hide' });
+    if (screen.orientation && screen.orientation.lock) { await screen.orientation.lock('landscape'); locked = true; }
+    else throw 0;
+  } catch (e) { locked = false; try { if (document.fullscreenElement) document.exitFullscreen(); } catch (_) {} }
+  fit();
+};
+document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement && locked) { try { screen.orientation.unlock(); } catch (e) {} locked = false; land = false; fit(); } });
+AK.act = AK.act || {}; AK.act.rotate = () => AK.rotate();
 
 /* ================= 主色 → CSS 变量(@property 过渡) ================= */
 const root = document.documentElement;
@@ -105,6 +141,7 @@ AK.toast = function (s) { const t = $('#toast'); t.textContent = s; t.classList.
 document.addEventListener('pointerdown', e => {
   const el = e.target.closest('.cell,.sbtn,.activity,.plus,.back,.btn,.chip,.arrow,#eliteBtn,[data-name]'); if (!el) return;
   clickSnd();
+  if (document.body.classList.contains('rot')) return; // 旋转后 getBoundingClientRect 与舞台坐标不对应,不画涟漪
   const host = el.closest('.cell,.sbtn,.activity,.btn,.back,.chip') || el;
   const r = host.getBoundingClientRect(), k = host.offsetWidth / (r.width || 1);
   const rp = document.createElement('i'); rp.className = 'ripple';
