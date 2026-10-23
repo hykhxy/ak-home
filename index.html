@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>Arknights-style Home UI · 学习用复刻</title>
 <meta name="description" content="明日方舟风格主界面 · 学习用复刻:干员、编队、任务、基建、语音、活动、创造角色">
 <script>
@@ -21,7 +21,7 @@
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@700;900&family=Oswald:wght@300;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@700;900&family=Oswald:wght@300;500;700&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=6">
 </head>
 <body>
 
@@ -182,6 +182,7 @@
       <div class="vt"><b>编队</b><span>SQUAD</span></div>
       <div class="vsp"></div>
       <div class="cnt"><b id="sqCnt">0</b> / 12</div>
+      <button class="btn alt mob-only" data-sheet="sqPick">+ 干员</button>
       <button class="btn go" data-act="sortie">出击 ▸</button>
     </div>
     <div class="sqbar" id="sqBar"></div>
@@ -204,6 +205,7 @@
       <div class="vt"><b>任务</b><span>MISSION</span></div>
       <div class="vsp"></div>
       <div class="cnt">可领取 <b id="tkReady">0</b></div>
+      <button class="btn alt mob-only" data-sheet="tkSide">进度奖励</button>
       <button class="btn go" id="tkAll">一键领取</button>
     </div>
     <div class="filters">
@@ -221,6 +223,7 @@
       <div class="vt"><b>基建</b><span>INFRASTRUCTURE</span></div>
       <div class="vsp"></div>
       <div class="bs-stat" id="bsStat"></div>
+      <button class="btn alt mob-only" data-sheet="bsDet">详情</button>
       <button class="btn" id="bsAuto" title="按干员基建技能自动分配,疲劳干员回宿舍">智能排班</button>
       <button class="btn go" id="bsAll">收获全部</button>
     </div>
@@ -236,6 +239,7 @@
       <div class="vt"><b>创造角色</b><span>CREATE CHARACTER</span></div>
       <div class="vsp"></div>
       <span class="ch-dirty" id="chDirty"></span>
+      <button class="btn alt mob-only" data-sheet="chSide">属性面板</button>
       <button class="btn alt" id="chSwitch" data-ch="switch">切换身份</button>
       <button class="btn go" id="chSave" data-ch="save">保存角色</button>
     </div>
@@ -251,6 +255,7 @@
       <div class="vt"><b>泰拉纪事</b><span>CHRONICLES OF TERRA</span></div>
       <div class="vsp"></div>
       <div class="cnt">纪事印记 <b id="evTk">0</b></div>
+      <button class="btn alt mob-only" data-sheet="evSide">说明</button>
     </div>
     <div class="filters"><div class="frow" id="evTabs"></div></div>
     <div class="gridwrap ev-body" id="evBody"></div>
@@ -316,13 +321,14 @@
 <script src="data/lore.js"></script>
 <script src="data/talents.js"></script>
 <script src="js/core.js"></script>
-<script src="js/app.js"></script>
+<script src="js/app.js?v=6"></script>
 <script src="js/squad.js"></script>
 <script src="js/task.js"></script>
 <script src="js/sortie.js"></script>
 <script src="js/voice.js"></script>
 <script src="js/base.js"></script>
 <script src="js/event.js"></script>
-<script src="js/char.js"></script>
+<script src="js/char.js?v=6"></script>
+<script src="js/mob.js?v=6"></script>
 </body>
 </html>
