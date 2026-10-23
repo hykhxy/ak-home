@@ -1,15 +1,16 @@
 /* cg.js — 干员寻访 · 五星/六星出货 CG
-   · 有「动态立绘」的干员(25 名六星)→ 播放官方 Spine 动态立绘(Idle 循环)
-   · 其余五/六星干员 → 立绘 + Spine 基建小人(走入 → 互动 → 待机)的演出
-   · 模型取自 isHarryh/Ark-Models(版权归鹰角网络),运行时用 Spine 3.8 WebGL
+   · 该干员有官方「动态立绘」(Spine)→ 全屏播放该干员专属的动态立绘(基础皮肤优先,否则取其有动态立绘的皮肤)
+   · 没有动态立绘的干员 → 以该干员自己的立绘 + 专属配色做游戏式登场演出(镜头推进、光扫、星级、职业/阵营、台词)
+   · 动态立绘取自 isHarryh/Ark-Models(版权归鹰角网络),运行时用 Spine 3.8 WebGL
    · 文件按需从 jsDelivr 多线路 / GitHub 代理竞速下载;下载中或失败时先用静态立绘演出,不会卡住流程 */
 (() => {
 'use strict';
 const AK = window.AK; if (!AK) return;
 const RC = AK.RC, esc = AK.esc;
 const SHA = 'e65fb9147846b64bcf2df956b8cd8da77a51b9b8';
-/* Ark-Models 里「基础皮肤」的动态立绘(models_illust/dyn_illust_<key>) */
-const DYN = new Set(['1012_skadi2', '1013_chen2', '1014_nearl2', '1015_aglna2', '1016_agoat2', '1023_ghost2', '1026_gvial2', '1028_texas2', '1035_wisdel', '1038_whitw2', '1041_angel2', '1044_hsgma2', '1045_svash2', '1052_kalts2', '113_cqbw', '2014_nian', '2015_dusk', '2023_ling', '2024_chyue', '2025_shu', '2026_yu', '2027_wang', '245_cello', '249_mlyss', '391_rosmon']);
+/* Ark-Models models_illust 里有完整 atlas/skel/png 的动态立绘:干员 key → 目录后缀('' = 基础皮肤) */
+const DYN = {'4121_zuole':'_nian#11','1012_skadi2':'','1044_hsgma2':'','1015_aglna2':'','2026_yu':'','1039_thorn2':'_marthe#9','4087_ines':'_boc#8','4010_etlchi':'_winter#5','472_pasngr':'_epoque#17','179_cgbird':'_sightseer#1','1014_nearl2':'','4202_haruka':'_iteration#6','1020_reed2':'_epoque#30','1041_angel2':'','2015_dusk':'','1035_wisdel':'','1019_siege2':'_epoque#50','2027_wang':'','113_cqbw':'','245_cello':'','450_necras':'_summer#20','437_mizuki':'_sale#7','2025_shu':'','350_surtr':'_summer#9','1032_excu2':'_sale#12','2014_nian':'_cfa#1','4134_cetsyr':'_epoque#50','4179_monstr':'_boc#11','249_mlyss':'','391_rosmon':'','4064_mlynar':'_epoque#28','1045_svash2':'','2023_ling':'','4080_lin':'_nian#10','322_lmlee':'_witch#3','250_phatom':'_sale#4','332_archet':'_sale#14','1052_kalts2':'','003_kalts':'_boc#6','1013_chen2':'','1028_texas2':'','4116_blkkgt':'_witch#5','1038_whitw2':'','4055_bgsnow':'_wild#7','1023_ghost2':'','1016_agoat2':'','2024_chyue':'','377_gdglow':'_summer#12','1026_gvial2':'','4132_ascln':'_iteration#4'};
+const dynBase = key => { const d = key + DYN[key]; return `models_illust/dyn_illust_${d}/dyn_illust_char_${d}`; };
 
 /* ---------- 下载:多线路竞速(错开启动,先成功者胜出,其余中止) ---------- */
 const encP = p => p.split('/').map(encodeURIComponent).join('/');
@@ -59,18 +60,24 @@ function ensureSpine() {
 const prep = new Map();
 const keyOf = o => o.id.replace(/^char_/, '');
 function warmModel(o) {
-  const key = keyOf(o); if (prep.has(key)) return prep.get(key);
-  const dyn = DYN.has(key), base = dyn ? `models_illust/dyn_illust_${key}/dyn_illust_char_${key}` : `models/${key}/build_char_${key}`;
+  const key = keyOf(o); if (!(key in DYN)) return Promise.reject(new Error('no dyn'));
+  if (prep.has(key)) return prep.get(key);
+  const base = dynBase(key), dir = base.slice(0, base.lastIndexOf('/') + 1);
   const pr = (async () => {
     const [atlasTxt, skel] = await Promise.all([getFile(base + '.atlas', 'text'), getFile(base + '.skel', 'buf')]);
-    const png = await getFile(base + '.png', 'buf', dyn);
-    const url = URL.createObjectURL(new Blob([png], { type: 'image/png' })), img = new Image();
-    img.src = url; await img.decode();
-    return { dyn, atlasTxt, skel, img, url };
+    /* atlas 可能有多页贴图:逐页下载 */
+    const pages = atlasTxt.split(/\r?\n/).map(s => s.trim()).filter(s => /\.png$/i.test(s));
+    const imgs = {}, urls = [];
+    await Promise.all(pages.map(async pg => {
+      const png = await getFile(dir + pg, 'buf', true);
+      const url = URL.createObjectURL(new Blob([png], { type: 'image/png' })), img = new Image();
+      img.src = url; await img.decode(); imgs[pg] = img; urls.push(url);
+    }));
+    return { atlasTxt, skel, imgs, urls };
   })();
   pr.catch(() => prep.delete(key));
   prep.set(key, pr);
-  while (prep.size > 5) { const k = prep.keys().next().value, v = prep.get(k); prep.delete(k); v.then(m => URL.revokeObjectURL(m.url), () => 0); }
+  while (prep.size > 3) { const k = prep.keys().next().value, v = prep.get(k); prep.delete(k); v.then(m => m.urls.forEach(u => URL.revokeObjectURL(u)), () => 0); }
   return pr;
 }
 
@@ -104,46 +111,27 @@ function visBounds(sk) {
 
 function startSpine(host, m) {
   const g = initGL(), sp = spine;
-  const atlas = new sp.TextureAtlas(m.atlasTxt, () => new sp.webgl.GLTexture(g.ctx, m.img));
+  const atlas = new sp.TextureAtlas(m.atlasTxt, pg => new sp.webgl.GLTexture(g.ctx, m.imgs[pg] || m.imgs[Object.keys(m.imgs)[0]]));
   const loader = new sp.AtlasAttachmentLoader(atlas), u8 = new Uint8Array(m.skel);
   const data = u8[0] === 0x7B ? new sp.SkeletonJson(loader).readSkeletonData(JSON.parse(new TextDecoder().decode(u8))) : new sp.SkeletonBinary(loader).readSkeletonData(u8);
   const sk = new sp.Skeleton(data), st = new sp.AnimationState(new sp.AnimationStateData(data));
-  const has = nm => data.findAnimation(nm), pick = re => (data.animations.find(a => re.test(a.name)) || {}).name;
-  let walk = 0;
-  if (m.dyn) {
-    const start = pick(/^start$/i), idle = pick(/^idle$/i) || data.animations[0].name;
-    if (start) { st.setAnimation(0, start, false); st.addAnimation(0, idle, true, 0); } else st.setAnimation(0, idle, true);
-  } else {
-    const mv = has('Move') ? 'Move' : null; walk = mv ? 1.15 : 0;
-    st.setAnimation(0, mv || (has('Relax') ? 'Relax' : data.animations[0].name), true);
-  }
+  const pick = re => (data.animations.find(a => re.test(a.name)) || {}).name;
+  const start = pick(/^(start|enter|appear)$/i), idle = pick(/^(idle|loop|relax)$/i) || data.animations[0].name;
+  if (start) { st.setAnimation(0, start, false); st.addAnimation(0, idle, true, 0); } else st.setAnimation(0, idle, true);
   sk.setToSetupPose(); st.update(0.4); st.apply(sk); sk.updateWorldTransform();
   const B = visBounds(sk);
   host.appendChild(g.cv);
   const mob = document.body.classList.contains('mob');
-  let raf = 0, last = performance.now(), t = 0, stage2 = false, alive = true;
+  let raf = 0, last = performance.now(), alive = true;
   const loop = now => {
     if (!alive) return;
     raf = requestAnimationFrame(loop);
-    const dt = Math.min(.05, (now - last) / 1000); last = now; t += dt;
+    const dt = Math.min(.05, (now - last) / 1000); last = now;
     const cw = host.clientWidth, ch = host.clientHeight; if (!cw || !ch) return;
     const K = Math.min(1.6, Math.max(1, window.devicePixelRatio || 1)), W = Math.round(cw * K), H = Math.round(ch * K);
     if (g.cv.width !== W || g.cv.height !== H) { g.cv.width = W; g.cv.height = H; }
-    let s, px, py;
-    if (m.dyn) {
-      s = mob ? ch / B.h * 1.02 : Math.min(cw / B.w, ch / B.h) * 1.06;
-      px = cw / 2 - (B.x + B.w / 2) * s; py = ch / 2 - (B.y + B.h / 2) * s;
-    } else {
-      s = ch * (mob ? .25 : .3) / B.h;
-      const tx = cw * (mob ? .3 : .24), floor = ch * (mob ? .075 : .06);
-      let ex = 1;
-      if (walk && t < walk) { const k = t / walk; ex = 1 - Math.pow(1 - k, 3); } else if (walk && !stage2) {
-        stage2 = true; if (has('Interact')) { st.setAnimation(0, 'Interact', false); st.addAnimation(0, has('Relax') ? 'Relax' : 'Default', true, 0); }
-        else if (has('Relax')) st.setAnimation(0, 'Relax', true);
-      }
-      const from = -B.w * s - 40, cx = from + (tx - from) * ex;
-      px = cx - (B.x + B.w / 2) * s; py = floor - B.y * s;
-    }
+    const s = mob ? ch / B.h * 1.02 : Math.min(cw / B.w, ch / B.h) * 1.06;
+    const px = cw / 2 - (B.x + B.w / 2) * s, py = ch / 2 - (B.y + B.h / 2) * s;
     sk.x = px; sk.y = py; sk.scaleX = sk.scaleY = s;
     st.update(dt); st.apply(sk); sk.updateWorldTransform();
     const gl = g.gl, r = g.r;
@@ -156,21 +144,24 @@ function startSpine(host, m) {
 }
 
 /* ---------- 演出 ---------- */
+let _gl = null;
+const webglOK = () => { if (_gl === null) { try { _gl = !!document.createElement('canvas').getContext('webgl'); } catch (e) { _gl = false; } } return _gl; };
 const hex2rgb = h => { const n = parseInt(h.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; };
 const el = () => document.getElementById('cgv');
 let skipAll = false, curEnd = null;
 
 function scene(it, idx, total, poolName) {
   return new Promise(res => {
-    const box = el(), o = it.op, r = it.r, tc = RC[r], key = keyOf(o), dyn = DYN.has(key);
+    const box = el(), o = it.op, r = it.r, tc = RC[r], key = keyOf(o), dyn = key in DYN && webglOK();
     box.style.setProperty('--tc', tc); box.style.setProperty('--tcrgb', hex2rgb(tc).join(','));
     box.style.setProperty('--ocrgb', hex2rgb(o.c || '#18d1ff').join(','));
-    box.className = 'on r' + r + (dyn ? ' dyn' : ' chibi');
+    box.className = 'on r' + r + (dyn ? ' dyn' : ' art');
     const stars = Array.from({ length: r + 1 }, (_, k) => `<i style="--k:${k}">★</i>`).join('');
     const sparks = Array.from({ length: 26 }, () => `<i style="--x:${(Math.random() * 100).toFixed(1)}%;--d:${(3 + Math.random() * 4).toFixed(1)}s;--l:${(-Math.random() * 6).toFixed(1)}s;--s:${(4 + Math.random() * 9).toFixed(0)}px"></i>`).join('');
     box.innerHTML = `<div class="cg-bg"></div><div class="cg-rays"></div>
-      <img class="cg-art" src="${AK.art(o)}" alt="" draggable="false">
-      <div class="cg-glwrap"></div><div class="cg-fx">${sparks}</div>
+      <div class="cg-wm">${esc((o.e || o.n).toUpperCase())}</div><div class="cg-ring"></div>
+      <div class="cg-artw"><img class="cg-art" src="${AK.art(o)}" alt="" draggable="false"></div>
+      <div class="cg-glwrap"></div><div class="cg-sweep"></div><div class="cg-fx">${sparks}</div>
       <div class="cg-bar"><b>HEADHUNTING</b><span>${esc(poolName || '')}</span></div>
       <div class="cg-info">
         <div class="cg-stars">${stars}</div>
@@ -180,7 +171,7 @@ function scene(it, idx, total, poolName) {
         ${o.qt ? `<div class="cg-qt">${esc(o.qt)}</div>` : ''}
       </div>
       <div class="cg-hud"><span class="cg-cnt">${idx + 1} / ${total}</span>${total > 1 ? '<button class="cg-skip" type="button">跳过全部 ▸▸</button>' : '<button class="cg-skip" type="button">跳过 ▸▸</button>'}</div>
-      <div class="cg-load">动态立绘载入中…</div><div class="cg-hint">点击继续</div><div class="cg-flash"></div>`;
+      ${dyn ? '<div class="cg-load">动态立绘载入中…</div>' : ''}<div class="cg-hint">点击继续</div><div class="cg-flash"></div>`;
     const t0 = performance.now(); let alive = true, ctl = null; const timers = [];
     const tm = (fn, ms) => timers.push(setTimeout(fn, ms));
     const end = all => {
@@ -196,7 +187,7 @@ function scene(it, idx, total, poolName) {
     }
     tm(() => box.classList.add('hint'), 1800);
     const loadEl = box.querySelector('.cg-load');
-    (async () => {
+    if (dyn) (async () => {
       try {
         await ensureSpine();
         const m = await warmModel(o);
@@ -208,7 +199,7 @@ function scene(it, idx, total, poolName) {
       }
     })();
     /* 预取后面要播放的下一个模型 */
-    if (it._next) warmModel(it._next).catch(() => 0);
+    if (it._next && keyOf(it._next) in DYN) warmModel(it._next).catch(() => 0);
     box.onclick = e => {
       if (e.target.closest('.cg-skip')) { end(true); return; }
       if (performance.now() - t0 > 1100) end(false);
@@ -238,5 +229,5 @@ async function run(items, pool) {
     box.className = ''; box.innerHTML = ''; running = false;
   }
 }
-AK.cg = { run, warm: () => ensureSpine().catch(() => 0), DYN, supported: () => { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl')); } catch (e) { return false; } } };
+AK.cg = { run, warm: () => ensureSpine().catch(() => 0), DYN, supported: () => true };
 })();
