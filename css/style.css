@@ -748,3 +748,6 @@ i.u,em.up,i.up{color:#9be26a;font-style:normal}i.d,em.dn,i.dn{color:#ff8a6a;font
 .ch-sb{margin-top:16px}.ch-side .note{margin-top:12px}
 .ch-avabtn .btn,.ch-url .btn{white-space:nowrap;padding:0 8px;font-size:14px}.ch-avabtn .btn:first-child{flex:1.6}.ch-url .btn{flex:none}.ch-url .ch-in{min-width:0}
 .ch-avabox{width:250px}.ch-avabox img{width:250px;height:250px}
+
+.chcell-ava{width:52px;height:52px;right:10px;bottom:10px}
+
