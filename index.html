@@ -5,6 +5,20 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Arknights-style Home UI · 学习用复刻</title>
 <meta name="description" content="明日方舟风格主界面 · 学习用复刻:干员、编队、任务、基建、语音、活动、创造角色">
+<script>
+/* 在沙盒 iframe(无 allow-same-origin)里嵌入时 localStorage 会抛 SecurityError:改用内存存储兜底,页面照常运行(此时存档不跨刷新保留) */
+(function () {
+  try { var k = '__t'; window.localStorage.setItem(k, '1'); window.localStorage.removeItem(k); return; } catch (e) {}
+  var m = {}, s = {
+    getItem: function (k) { return Object.prototype.hasOwnProperty.call(m, k) ? m[k] : null; },
+    setItem: function (k, v) { m[k] = String(v); }, removeItem: function (k) { delete m[k]; },
+    clear: function () { m = {}; }, key: function (i) { return Object.keys(m)[i] || null; }
+  };
+  Object.defineProperty(s, 'length', { get: function () { return Object.keys(m).length; } });
+  try { Object.defineProperty(window, 'localStorage', { value: s, configurable: true }); } catch (e) { window.__memStore = s; }
+  window.__noPersist = true;
+})();
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@700;900&family=Oswald:wght@300;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@700;900&family=Oswald:wght@300;500;700&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="css/style.css">
