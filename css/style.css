@@ -751,3 +751,396 @@ i.u,em.up,i.up{color:#9be26a;font-style:normal}i.d,em.dn,i.dn{color:#ff8a6a;font
 
 .chcell-ava{width:52px;height:52px;right:10px;bottom:10px}
 
+/* =====================================================================
+   手机端(窄竖屏):app.js 的 fit() 给 body 加 .mob,舞台宽≈420 设计像素、高随屏幕
+   所有规则都带 body.mob 前缀,桌面端不受影响
+   ===================================================================== */
+.mob-only{display:none!important}
+#sheetBd,#sheetX{display:none}
+@keyframes sheetIn{from{opacity:0;translate:0 40px}to{opacity:1;translate:0 0}}
+
+body.mob{touch-action:manipulation;-webkit-tap-highlight-color:transparent;position:fixed;inset:0;width:100%;height:100%;overflow:hidden;overflow:clip}
+body.mob .mob-only{display:inline-block!important}
+body.mob #hint,body.mob #grain,body.mob #scan,body.mob #rays2,body.mob #flare{display:none!important}
+body.mob #loader .box{width:78%}
+body.mob #wipeT b{font-size:54px}
+body.mob #wipeT span{font-size:13px;margin-top:6px;letter-spacing:.4em}
+body.mob #toast{top:44px;font-size:13px;padding:6px 14px;max-width:90vw}
+
+/* ---------- 子页通用 ---------- */
+body.mob .view.on{display:flex;flex-direction:column;overflow:hidden}
+body.mob #v-lobby.on{display:block;overflow:visible}
+body.mob .vh{position:relative;flex:none;width:100%;height:auto;min-height:46px;padding:8px 10px;gap:6px;flex-wrap:wrap}
+body.mob .back{height:34px;padding:0 12px 0 8px;font-size:15px;gap:4px}
+body.mob .back b{font-size:22px}
+body.mob .vt{margin-left:4px;gap:8px}
+body.mob .vt b{font-size:22px}
+body.mob .vt span{display:none}
+body.mob .cnt{font-size:11px;margin-right:2px;letter-spacing:.1em}
+body.mob .cnt b{font-size:16px}
+body.mob .search{order:10;width:100%;height:36px;font-size:16px;padding:0 12px}
+body.mob .btn{height:32px;padding:0 12px;font-size:13px}
+body.mob .btn.big{height:44px;padding:0 36px;font-size:18px}
+body.mob #v-base .vh .btn,body.mob #v-char .vh .btn{margin-left:0}
+body.mob .filters{position:relative;flex:none;left:auto;top:auto;width:100%;padding:0 10px;gap:6px}
+body.mob #tkInfo{width:100%}
+body.mob .frow{gap:6px;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none}
+body.mob .frow::-webkit-scrollbar{display:none}
+body.mob .frow>*{flex:none}
+body.mob .frow .lb{width:auto;font-size:11px;letter-spacing:.1em}
+body.mob .chip{height:28px;padding:0 11px;font-size:13px;white-space:nowrap}
+body.mob .tki{font-size:12px;padding:4px 10px;white-space:nowrap}
+body.mob .gridwrap{position:relative!important;left:auto!important;top:auto!important;width:auto!important;height:auto!important;flex:1 1 0;min-height:0;margin:6px 8px 0;padding:4px 4px 16px 0;-webkit-overflow-scrolling:touch}
+body.mob .cell:hover,body.mob .card:hover,body.mob .itm:hover,body.mob .sqslot.filled:hover{transform:none}
+
+/* ---------- 详情面板 → 底部抽屉 ---------- */
+body.mob .detail,body.mob .detail.picker,body.mob .ch-detail{position:absolute!important;left:0!important;right:0!important;top:auto!important;bottom:0!important;width:auto!important;height:78%!important;display:none;z-index:40;
+  background:rgba(9,14,20,.97);backdrop-filter:none;clip-path:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,0 100%);animation:sheetIn .28s var(--ease) both}
+body.mob .detail.open{display:block}
+body.mob .detail.picker.open{display:flex;flex-direction:column}
+body.mob.sheet #sheetBd{display:block;position:absolute;inset:0;z-index:39;background:rgba(0,0,0,.55);pointer-events:auto}
+body.mob.sheet #sheetX{display:block;position:absolute;right:8px;bottom:calc(78% - 40px);z-index:41;width:34px;height:34px;background:rgba(255,255,255,.14);font:300 20px/34px var(--sans);color:#fff;text-align:center;pointer-events:auto}
+body.mob .iDet{padding:46px 16px 18px}
+body.mob .iDet .big{height:120px;margin-bottom:10px}
+body.mob .iDet .big img{width:90px}
+body.mob .iDet .nm{font-size:24px}
+body.mob .iDet .sub{font-size:13px;gap:10px}
+body.mob .iDet p{font-size:14px}
+body.mob .iDet .note{font-size:12px;margin-top:12px}
+body.mob .pbig b{font-size:46px}
+body.mob .pbig span{font-size:20px}
+
+/* ---------- 大厅 ---------- */
+body.mob #charwrap{left:0;top:44px;width:100%;height:calc(100% - 384px)}
+body.mob #halo{width:300px;height:300px;margin:-160px 0 0 -150px}
+body.mob #halo::before{inset:30px}body.mob #halo::after{inset:8px}
+body.mob #floor{width:300px;height:60px;margin-left:-150px;bottom:-14px}
+body.mob .slot img{width:100%;height:100%}
+body.mob #flash{width:320px;height:320px;margin:-160px 0 0 -160px}
+body.mob #charHit{left:0;top:0;width:100%;height:100%}
+body.mob #nameplate{left:12px;top:10px;width:66%}
+body.mob #nameplate .no{font-size:11px;gap:8px}
+body.mob #nameplate .no::before{width:24px;height:2px}
+body.mob #nameplate .nm{font-size:36px;margin-top:2px}
+body.mob #nameplate .en{font-size:12px;margin-top:0}
+body.mob #nameplate .meta{margin-top:6px;gap:6px;flex-wrap:wrap}
+body.mob .stars{font-size:14px}
+body.mob .tag{font-size:11px;padding:1px 7px}
+body.mob .arrow{width:30px;height:52px;font-size:24px}
+body.mob #prevOp{left:4px;top:calc(50% - 170px)}
+body.mob #nextOp{left:auto;right:4px;top:calc(50% - 170px)}
+body.mob #pager{left:12px;top:auto;bottom:382px;font-size:11px}
+body.mob #pager b{font-size:16px}
+body.mob #eliteBtn{left:auto;right:12px;top:auto;bottom:382px;height:26px;padding:0 12px;font-size:12px}
+body.mob #level{left:auto;right:6px;top:8px;transform:scale(.55);transform-origin:right top}
+
+body.mob .menu.left{left:10px;right:10px;bottom:248px;width:auto;transform:none}
+body.mob .voice{min-height:38px;margin:0 0 20px;padding:7px 12px;font-size:13px}
+body.mob .voice::before{font-size:10px;top:-15px;left:-4px;padding:1px 9px}
+body.mob .vbtn{top:-17px;font-size:11px;padding:1px 9px}
+body.mob .voice .cur{width:6px}
+body.mob .lrow{height:52px;gap:6px}
+body.mob .activity{width:60%}
+body.mob .activity .tg{font-size:9px;padding:1px 9px 1px 6px}
+body.mob .activity .t1{font-size:20px;left:10px;bottom:20px}
+body.mob .activity .t2{font-size:10px;left:10px;bottom:6px;letter-spacing:.12em}
+body.mob .activity::after{width:80px;height:80px;border-width:9px;right:-16px;top:-16px}
+body.mob .activity .dot{right:6px;top:4px;min-width:18px;height:18px;font-size:11px;line-height:18px}
+body.mob .lcol{gap:4px}
+body.mob .sbtn .ico{left:8px;top:6px;width:18px;height:18px}
+body.mob .sbtn .tx{font-size:14px;right:8px;bottom:4px}
+
+body.mob .menu.right{left:0;right:0;bottom:0;width:auto;height:auto;transform:none;display:grid;grid-template-columns:repeat(6,1fr);gap:5px;padding:0 10px 8px;align-content:end}
+body.mob .menu.right .top{display:none}
+body.mob .menu.right .status{position:relative!important;left:auto!important;right:auto!important;top:auto!important;order:1;grid-column:1/-1;height:30px}
+body.mob .status .row{left:8px;gap:14px}
+body.mob .res{gap:4px}
+body.mob .res svg{width:18px;height:18px}
+body.mob .res b{font-size:15px}
+body.mob .res .plus{width:16px;height:16px;font-size:13px;border-width:1px}
+body.mob .menu.right .cell{position:relative!important;left:auto!important;top:auto!important;width:auto!important;height:44px!important;grid-column:span 2}
+body.mob .menu.right .cell .tx{left:8px!important;top:5px!important;font-size:18px!important}
+body.mob .menu.right .cell .ico{left:auto!important;top:auto!important;right:6px!important;bottom:4px!important;width:26px!important;height:26px!important}
+body.mob .menu.right .cell .dot{right:4px;top:3px;min-width:16px;height:16px;font-size:10px;line-height:16px;box-shadow:none}
+body.mob .menu.right .cell.k{display:none!important}
+body.mob .menu.right #op{order:2;grid-column:1/-1;height:56px!important}
+body.mob .menu.right [data-go=squad]{order:3}
+body.mob .menu.right [data-go=ops]{order:4}
+body.mob .menu.right [data-go=char]{order:5}
+body.mob .menu.right [data-go=task]{order:6}
+body.mob .menu.right [data-go=base]{order:7}
+body.mob .menu.right [data-go=depot]{order:8}
+body.mob .menu.right .cell.b:not([data-go]){order:9;grid-column:1/-1;display:flex!important;height:38px!important}
+body.mob .menu.right .cell[data-go=ops] .tx~.tx{display:none!important}
+body.mob .menu.right .cell .bar{height:3px;top:-2px!important;left:20px!important;width:80px!important}
+body.mob .chcell-n{left:8px;bottom:3px;max-width:70px;font-size:10px}
+body.mob .chcell-ava{width:30px;height:30px;right:6px;bottom:4px;border-width:1px}
+/* 作战格 */
+body.mob #op .sanity{left:6px;top:6px;width:76px;height:44px}
+body.mob #op .sanity small{left:6px;top:3px;font-size:8px}
+body.mob #op .sanity .v{right:6px;top:8px;font-size:26px;text-shadow:2px 2px 0 #8b8b8b}
+body.mob #op .sanity .m{right:6px;bottom:2px;font-size:10px}
+body.mob .menu.right #op .tx{left:94px!important;top:5px!important;font-size:26px!important}
+body.mob #op .cur2{left:96px;top:35px;display:flex;align-items:center;gap:6px}
+body.mob #op .cur2 em{font-size:10px;padding:1px 6px;border-radius:3px}
+body.mob #op .cur2 span{margin:0;font-size:12px}
+body.mob #op .bar{left:80px;top:-2px;width:120px}
+body.mob .menu.right #op .ico{left:auto!important;top:6px!important;right:12px!important;bottom:auto!important;width:44px!important;height:44px!important}
+/* 招募格 */
+body.mob .menu.right .cell.b:not([data-go])>div:first-child{display:none!important}
+body.mob .menu.right .cell.b:not([data-go]) [data-name]{position:relative!important;left:auto!important;top:auto!important;width:auto!important;height:auto!important;flex:1}
+body.mob .menu.right .cell.b:not([data-go]) [data-name] .ico{left:8px!important;top:8px!important;right:auto!important;bottom:auto!important;width:22px!important;height:22px!important}
+body.mob .menu.right .cell.b:not([data-go]) [data-name] .tx{left:38px!important;top:9px!important;bottom:auto!important;font-size:15px!important}
+
+/* ---------- 干员 / 仓库 ---------- */
+body.mob .ogrid{grid-template-columns:repeat(3,1fr);gap:8px}
+body.mob .card .nm{font-size:16px;left:8px;bottom:23px}
+body.mob .card .pf{font-size:11px;left:8px;bottom:7px}
+body.mob .card .st{font-size:12px;right:5px;top:4px}
+body.mob .igrid{grid-template-columns:repeat(4,1fr);gap:6px}
+body.mob .itm .n{font-size:10px;padding:3px 4px 4px}
+body.mob .itm .q{font-size:14px;right:4px;bottom:20px}
+body.mob .dArt{height:170px}
+body.mob .dArt img{height:170px;max-width:100%}
+body.mob .dArt .bigno{font-size:40px}
+body.mob .dBody{top:160px;padding:0 16px 16px}
+body.mob .dBody .nm{font-size:26px}
+body.mob .dBody .en{font-size:13px}
+body.mob .dBody .ds{font-size:14px;margin-top:10px}
+body.mob .dBody .qt{font-size:13px}
+body.mob .sts{gap:6px 16px}
+body.mob .stt{font-size:12px}
+body.mob .stt b{font-size:15px}
+body.mob .btns{margin-top:12px;flex-wrap:wrap}
+
+/* ---------- 编队 ---------- */
+body.mob #v-squad .vh{padding-bottom:4px}
+body.mob .sqbar{position:relative;flex:none;left:auto;top:auto;width:auto;margin:4px 10px 0;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none}
+body.mob .sqbar>*{flex:none}
+body.mob .sqgrid{position:relative;flex:none;left:auto;top:auto;width:auto;margin:8px 10px 0;grid-template-columns:repeat(4,1fr);grid-template-rows:none;grid-auto-rows:100px;height:auto;gap:6px}
+body.mob .sqslot .nm{font-size:12px;left:5px;bottom:19px}
+body.mob .sqslot .pf{font-size:10px;left:5px;bottom:6px}
+body.mob .sqslot .no{font-size:11px;left:5px;top:3px}
+body.mob .sqslot .st{font-size:10px;right:4px;top:4px}
+body.mob .sqslot .ldr,body.mob .sqslot .ld{top:18px;font-size:10px;padding:1px 8px 1px 5px}
+body.mob .sqslot .ld,body.mob .sqslot .x{opacity:1}
+body.mob .sqslot .x{top:16px;width:20px;height:20px;font-size:16px;line-height:20px}
+body.mob .sqslot.empty{grid-column:auto;padding:0}
+body.mob .sqslot.empty .plus{font-size:40px}
+body.mob .sqslot.empty .hint{display:none}
+body.mob .sqstat{position:relative;left:auto;top:auto;width:auto;height:auto;flex:1 1 0;min-height:0;margin:8px 10px 10px;padding:10px 12px;overflow-y:auto;clip-path:none}
+body.mob .sqstat .sh b{font-size:18px}
+body.mob .sqstat .sh span{font-size:11px}
+body.mob .sqstat .sh em{font-size:20px}
+body.mob .sbars{gap:5px 16px;margin-top:8px}
+body.mob .sb{font-size:12px;gap:6px}
+body.mob .sb span{width:26px}
+body.mob .sb b{font-size:14px}
+body.mob .sn{grid-template-columns:repeat(2,1fr);gap:6px;margin-top:8px}
+body.mob .sn div{padding:5px 10px}
+body.mob .sn small,body.mob .sn2 small{font-size:10px}
+body.mob .sn b,body.mob .sn2 b{font-size:20px}
+body.mob .slq{min-height:54px;padding:6px 10px;gap:10px}
+body.mob .slq img{width:40px;height:40px}
+body.mob .slq p{font-size:12px}
+body.mob .pkh{padding:46px 12px 6px;gap:8px;flex:none}
+body.mob .pkgrid{position:relative;flex:1 1 0;min-height:0;left:auto;right:auto;top:auto;bottom:auto;grid-template-columns:repeat(3,1fr);grid-auto-rows:168px;gap:8px;padding:6px 12px 16px}
+body.mob .picker .frow{flex-wrap:wrap;overflow:visible}
+body.mob .picker .chip{height:28px;padding:0 10px;font-size:13px}
+body.mob .pk .nm{font-size:14px;bottom:22px}
+
+/* ---------- 任务 ---------- */
+body.mob .tk{flex-wrap:wrap;gap:6px 10px;min-height:0;padding:10px 12px}
+body.mob .tkl{flex:1 1 100%}
+body.mob .tkt{font-size:14px}
+body.mob .tkt em{font-size:10px;padding:0 6px;margin-right:6px}
+body.mob .tkl small{font-size:12px}
+body.mob .tkp{width:auto;font-size:18px}
+body.mob .tkp small{display:inline;margin-left:2px}
+body.mob .tkr{min-width:0;flex:1;justify-content:flex-start;gap:5px}
+body.mob .rwi{width:40px;height:40px}
+body.mob .rwi img{width:28px;height:28px}
+body.mob .rwi b{font-size:11px}
+body.mob .tk .btn{width:84px;height:30px;margin-left:auto}
+body.mob .chests{gap:6px}
+body.mob .chest .rwi{width:34px;height:34px}
+body.mob .chest .rwi img{width:24px;height:24px}
+body.mob .sn2{gap:6px}
+
+/* ---------- 基建 ---------- */
+body.mob .bs-stat{order:10;width:100%;margin:0;gap:12px;flex-wrap:wrap;font-size:11px}
+body.mob .bs-stat b{font-size:16px}
+body.mob .bs-map{position:relative;left:auto;top:auto;width:auto;height:auto;flex:1 1 0;min-height:0;margin:6px 8px 0;overflow-y:auto;gap:8px;padding-bottom:12px}
+body.mob .bs-grid{flex:none;grid-template-columns:repeat(2,1fr);grid-template-rows:none;grid-auto-rows:minmax(122px,auto);gap:8px}
+body.mob .bs-rh{padding:7px 8px 0}
+body.mob .bs-rh b{font-size:16px}
+body.mob .bs-rh em{font-size:13px}
+body.mob .bs-rh small{display:none}
+body.mob .bs-rb{padding:4px 8px;gap:8px}
+body.mob .bs-pi{width:30px;height:30px}
+body.mob .bs-t1{font-size:15px}
+body.mob .bs-t2{font-size:11px}
+body.mob .bs-ops{padding:0 8px 7px;gap:4px;flex-wrap:wrap}
+body.mob .bs-av{width:32px;height:32px}
+body.mob .bs-empty .bs-plus{font-size:36px}
+body.mob .bs-ctrl{height:auto;grid-template-columns:1fr;padding-bottom:6px;flex:none}
+body.mob .bs-ctrl .bs-rh{padding:8px 12px 0}
+body.mob .bs-ctrl .bs-rh b{font-size:22px}
+body.mob .bs-ctrl .bs-rb{padding:0 12px}
+body.mob .bs-ctrl .bs-t1{font-size:16px}
+body.mob .bs-ctrl .bs-ops{padding:6px 12px 0}
+body.mob .bs-ctrl .bs-av{width:40px;height:40px}
+body.mob .bs-d{padding:46px 16px 18px}
+body.mob .bs-dh b{font-size:26px}
+body.mob .bs-kv b{font-size:20px}
+body.mob #bsPick{z-index:45}
+body.mob .bp-box{left:8px;right:8px;top:10px;bottom:10px;width:auto;height:auto}
+body.mob .bp-h{flex-wrap:wrap;gap:8px;padding:10px 12px}
+body.mob .bp-h b{font-size:20px}
+body.mob .bp-h>span{font-size:12px;flex:1 1 100%;order:3}
+body.mob .bp-h .search{width:100%;order:9}
+body.mob .bp-g{grid-template-columns:1fr;grid-auto-rows:88px;padding:4px 12px 16px;gap:8px}
+body.mob .bp-c{padding:8px;gap:10px}
+body.mob .bp-c>img{width:68px;height:68px}
+body.mob .bp-i b{font-size:16px}
+
+/* ---------- 创造角色 ---------- */
+body.mob .ch-dirty{font-size:11px;margin-right:0}
+body.mob .ch-pick{grid-template-columns:1fr;gap:12px;margin-top:8px}
+body.mob .ch-pc{min-height:0;padding:18px 16px 14px;gap:14px}
+body.mob .ch-pc img{width:84px;height:84px}
+body.mob .ch-pc b{font-size:26px;margin:4px 0 8px}
+body.mob .ch-pc p{font-size:13px;line-height:1.65}
+body.mob .ch-pc p.d{font-size:12px}
+body.mob .ch-pc .go{position:relative;right:auto;bottom:auto;display:block;margin-top:6px;font-size:16px;text-align:right}
+body.mob .ch-tip{font-size:12px}
+body.mob .ch-sec{padding:14px 12px 14px;margin-bottom:12px}
+body.mob .ch-sec h3{font-size:18px;margin-bottom:10px;flex-wrap:wrap;gap:6px 10px}
+body.mob .ch-sec h3 b{font-size:14px}
+body.mob .ch-sec h3 em{font-size:10px}
+body.mob .ch-p{font-size:14px}
+body.mob .ch-kv>div{padding:6px 10px}
+body.mob .ch-kv b{font-size:15px}
+body.mob .ch-tl b{font-size:15px}
+body.mob .ch-tl p{font-size:14px}
+body.mob .ch-in{font-size:16px;height:40px}
+body.mob textarea.ch-in{height:auto}
+body.mob .ch-idrow{flex-direction:column;gap:14px;align-items:center}
+body.mob .ch-avabox,body.mob .ch-avabox img{width:180px}
+body.mob .ch-avabox img{height:180px}
+body.mob .ch-grid2,body.mob .ch-grid3{grid-template-columns:1fr;width:100%}
+body.mob .ch-grid2 .w2,body.mob .ch-grid3 .w2,body.mob .ch-grid3 .w3{grid-column:auto}
+body.mob .ch-chip{height:32px;padding:0 12px;font-size:14px}
+body.mob .ch-tgrid{grid-template-columns:1fr}
+body.mob .ch-tc{padding:10px 14px}
+body.mob .ch-ar{grid-template-columns:64px 96px 1fr 36px;gap:2px 8px;padding:8px 10px}
+body.mob .ch-ar .n b{font-size:16px}
+body.mob .ch-ar .st b{font-size:20px;min-width:24px}
+body.mob .ch-ar .st button{width:28px;height:28px;font-size:20px;line-height:28px}
+body.mob .ch-ar .v b{font-size:22px}
+body.mob .ch-pts{font-size:14px}
+body.mob .ch-pts b{font-size:26px}
+body.mob .ch-side{padding:46px 14px 18px}
+body.mob .ch-ava{width:72px;height:72px}
+body.mob .ch-id b{font-size:24px}
+body.mob .ch-score b{font-size:38px}
+body.mob .ch-score .gr{font-size:46px}
+body.mob .ch-radar{height:210px}
+body.mob .ch-dv b{font-size:20px}
+
+/* ---------- 泰拉纪事 ---------- */
+body.mob .ev-hero{height:auto;padding:16px 14px 16px;clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,0 100%)}
+body.mob .ev-kv{position:relative;left:auto;top:auto;width:auto}
+body.mob .ev-kv b{font-size:34px;margin-top:6px}
+body.mob .ev-kv em{font-size:12px;letter-spacing:.3em}
+body.mob .ev-kv p{font-size:13px;margin-top:8px}
+body.mob .ev-globe{display:none}
+body.mob .ev-tiles{grid-template-columns:repeat(2,1fr);gap:8px}
+body.mob .ev-tiles b{font-size:26px}
+body.mob .ev-sub{flex-wrap:wrap;margin-bottom:8px}
+body.mob .ev-cards{grid-template-columns:1fr;grid-auto-rows:auto;gap:8px}
+body.mob .ev-card{padding:12px 14px}
+body.mob .ev-card b{font-size:22px}
+body.mob .ev-d{padding:0 0 18px}
+body.mob .ev-d>p,body.mob .ev-d>.hd2,body.mob .ev-d>.ev-ops,body.mob .ev-d>.note{margin-left:0;margin-right:0}
+body.mob .ev-art{height:150px;margin:0 -16px}
+body.mob .ev-art img{height:150px}
+body.mob .ev-art img:nth-of-type(2),body.mob .ev-art img:nth-of-type(3){height:130px}
+body.mob .ev-dh{padding:12px 0 0}
+body.mob .ev-dh b{font-size:28px}
+body.mob .ev-d p{font-size:14px;line-height:1.8}
+body.mob .ev-qstart>b{font-size:30px}
+body.mob .ev-qstart p{font-size:13px}
+body.mob .ev-score{font-size:72px}
+body.mob .ev-qq{font-size:20px;margin:16px 0 14px}
+body.mob .ev-qo{grid-template-columns:1fr;gap:8px}
+body.mob .ev-opt{height:54px;font-size:16px;padding:0 14px}
+body.mob .ev-qf span{font-size:16px}
+body.mob .ev-shop{grid-template-columns:repeat(2,1fr);gap:8px}
+body.mob .ev-sitem img{width:60px;height:60px}
+
+/* ---------- 角色语音 ---------- */
+body.mob #vcArt{position:relative;flex:none;left:auto;top:auto;width:auto;height:150px;margin:6px 10px 0;clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,0 100%)}
+body.mob .vhalo{width:200px;height:200px;margin:-100px 0 0 -100px}
+body.mob #vcImg{left:0;right:0;width:100%;height:100%;object-fit:cover;object-position:50% 10%}
+body.mob #vcPrev,body.mob #vcNext{top:48px;width:28px;height:52px;font-size:22px}
+body.mob #vcPrev{left:4px}
+body.mob #vcNext{right:4px}
+body.mob .vcinfo{padding:34px 40px 8px 12px}
+body.mob .vi-n b{font-size:24px}
+body.mob .vi-n span{font-size:11px}
+body.mob .vi-s{font-size:12px;gap:10px;margin-top:2px}
+body.mob .vi-cv,body.mob .vi-c,body.mob .vi-i{display:none}
+body.mob .vcright{position:relative;left:auto;top:auto;width:auto;height:auto;flex:1 1 0;min-height:0;margin:6px 10px 0;gap:6px}
+body.mob .vl{padding:8px 10px;gap:8px}
+body.mob .vl .n{width:18px;font-size:11px}
+body.mob .vl em{width:62px;font-size:12px}
+body.mob .vl p{font-size:13px;line-height:1.5}
+body.mob #vcPlayer{position:relative;flex:none;left:auto;top:auto;width:auto;height:auto;margin:6px 10px 10px;padding:8px 10px;gap:6px 10px;flex-wrap:wrap;clip-path:none}
+body.mob #vcAva{width:44px;height:44px}
+body.mob .pl-main{flex:1 1 60%}
+body.mob .pl-t b{font-size:14px}
+body.mob .pl-t span{font-size:11px}
+body.mob .pl-x{height:36px;font-size:12px;line-height:1.45}
+body.mob .pl-ctl{width:100%;gap:6px 10px}
+body.mob .pl-ctl .btn{width:88px}
+body.mob label.tg,body.mob label.rg{font-size:12px}
+body.mob label.rg input{width:64px}
+body.mob .sel{max-width:130px;height:30px;font-size:12px}
+
+/* ---------- 弹窗 ---------- */
+body.mob #sortie .so-box{left:6px;right:6px;top:8px;width:auto;height:calc(100% - 16px);clip-path:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,0 100%)}
+body.mob .so-h{height:54px;padding:0 8px 0 14px;gap:8px}
+body.mob .so-h b{font-size:22px}
+body.mob .so-h small{display:none}
+body.mob .so-san{font-size:11px}
+body.mob .so-san em{font-size:20px}
+body.mob .so-x{width:38px;height:38px;font-size:28px;line-height:38px}
+body.mob .so-body{flex-direction:column;height:calc(100% - 54px);overflow-y:auto}
+body.mob .so-left{width:100%;flex:none;height:250px;padding:10px 12px;border-right:0;border-bottom:1px solid rgba(255,255,255,.08)}
+body.mob .so-st{height:42px;padding:0 10px;gap:8px}
+body.mob .so-st b{font-size:20px;width:66px}
+body.mob .so-st span{font-size:13px}
+body.mob .so-right{flex:none;padding:14px 14px 18px;gap:12px;overflow:visible}
+body.mob .so-t b{font-size:46px}
+body.mob .so-t span{font-size:18px}
+body.mob .so-m{grid-template-columns:repeat(2,1fr)}
+body.mob .so-m b{font-size:24px}
+body.mob .so-av{grid-template-columns:repeat(6,1fr)}
+body.mob .so-go{flex-wrap:wrap}
+body.mob .rn-k b{font-size:80px}
+body.mob .rs-st i{font-size:56px}
+body.mob .rs-st b{font-size:36px}
+body.mob .rs-st{min-height:70px;gap:8px}
+body.mob .so-rw .rw-i{width:88px;height:120px}
+body.mob .rw-box{min-width:0;width:calc(100% - 24px);max-width:none;padding:20px 14px 14px}
+body.mob .rw-h{font-size:24px}
+body.mob .rw-g{gap:8px;margin:14px 0 10px}
+body.mob .rw-i{width:84px;height:108px}
+body.mob .rw-i img{width:50px;height:50px}
+body.mob .rw-i b{font-size:18px}
+body.mob #sayBox{width:calc(100% - 16px);bottom:8px;gap:10px;padding:8px 12px 8px 8px}
+body.mob #sayBox img{width:48px;height:48px}
+body.mob .sb-n{font-size:13px}
+body.mob .sb-t{font-size:14px;min-height:0}
+
