@@ -11,6 +11,13 @@
   background:repeating-conic-gradient(from 0deg,rgba(var(--tcrgb),.20) 0 3deg,transparent 3deg 12deg);
   -webkit-mask-image:radial-gradient(circle,#000 0,transparent 34%);mask-image:radial-gradient(circle,#000 0,transparent 34%);
   animation:cgSpin 46s linear infinite,cgRays 1.4s ease-out both}
+.cg-artw{position:absolute;inset:0;transform-origin:78% 58%}
+#cgv.art .cg-artw{animation:cgKb 16s ease-out both}
+.cg-wm{position:absolute;left:-1%;top:6%;font-weight:900;font-size:300px;line-height:1;letter-spacing:.02em;white-space:nowrap;color:transparent;-webkit-text-stroke:2px rgba(var(--tcrgb),.22);animation:cgWm 1.6s cubic-bezier(.2,.8,.2,1) .1s both,cgWmF 9s ease-in-out 1.7s infinite alternate}
+.cg-ring{position:absolute;right:6%;top:50%;width:980px;height:980px;margin-top:-490px;border-radius:50%;border:2px solid rgba(var(--tcrgb),.55);box-shadow:0 0 60px rgba(var(--tcrgb),.35),inset 0 0 90px rgba(var(--ocrgb),.35);
+  background:conic-gradient(from 0deg,rgba(var(--tcrgb),.0),rgba(var(--tcrgb),.28),rgba(var(--ocrgb),.0) 60%,rgba(var(--ocrgb),.22),rgba(var(--tcrgb),.0));animation:cgRing 1.1s cubic-bezier(.2,.8,.2,1) .15s both,cgSpin 24s linear 1.3s infinite}
+.cg-ring::after{content:"";position:absolute;inset:46px;border-radius:50%;border:1px dashed rgba(255,255,255,.4)}
+.cg-sweep{position:absolute;top:-10%;left:-40%;width:26%;height:120%;transform:skewX(-18deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),rgba(var(--tcrgb),.35),transparent);mix-blend-mode:screen;animation:cgSweep 6s ease-in-out .5s infinite}
 .cg-art{position:absolute;right:3%;bottom:0;height:104%;max-width:72%;object-fit:contain;object-position:right bottom;
   filter:drop-shadow(0 0 46px rgba(var(--tcrgb),.5));animation:cgArt 1.2s cubic-bezier(.16,.84,.24,1) .2s both;transition:opacity .9s}
 #cgv.dyn .cg-art{right:0;left:0;width:100%;height:100%;max-width:none;object-position:center;object-fit:contain;filter:none;animation:cgArtD 1.2s cubic-bezier(.16,.84,.24,1) .2s both}
@@ -26,7 +33,6 @@
 .cg-bar b{font:900 30px var(--cond,inherit);letter-spacing:.34em;color:#0a1118}
 .cg-bar span{font:600 20px var(--cond,inherit);letter-spacing:.2em;color:rgba(10,17,24,.75)}
 .cg-info{position:absolute;left:96px;bottom:116px;max-width:1000px;text-shadow:0 2px 18px rgba(0,0,0,.85)}
-#cgv.chibi .cg-info{bottom:auto;top:190px}
 .cg-stars{display:flex;gap:6px;font-size:64px;line-height:1;color:var(--tc);filter:drop-shadow(0 0 16px rgba(var(--tcrgb),.95))}
 .cg-stars i{font-style:normal;display:block;animation:cgStar .5s cubic-bezier(.2,1.4,.4,1) calc(.7s + var(--k)*.15s) both}
 .cg-en{margin-top:14px;font:600 28px var(--cond,inherit);letter-spacing:.3em;color:rgba(255,255,255,.75);text-transform:uppercase;animation:cgReveal .8s cubic-bezier(.2,.8,.2,1) .55s both}
@@ -50,6 +56,11 @@
 #cgv.hint .cg-hint{animation:cgBlink 1.6s ease-in-out infinite}
 .cg-flash{position:absolute;inset:0;background:#fff;animation:cgFlash .9s ease-out both;z-index:4}
 #cgv.r5 .cg-flash{background:radial-gradient(circle at 50% 50%,#fff 0,#fff 30%,rgba(var(--tcrgb),.9) 100%);animation-duration:1.3s}
+@keyframes cgKb{from{transform:scale(1)}to{transform:scale(1.07) translateX(-1.2%)}}
+@keyframes cgWm{from{opacity:0;transform:translateX(-120px)}to{opacity:1;transform:none}}
+@keyframes cgWmF{from{transform:translateX(0)}to{transform:translateX(40px)}}
+@keyframes cgRing{from{opacity:0;scale:.5}to{opacity:1;scale:1}}
+@keyframes cgSweep{0%{left:-40%;opacity:0}6%{opacity:1}30%{left:130%;opacity:1}31%,100%{left:130%;opacity:0}}
 @keyframes cgFlash{0%{opacity:1}100%{opacity:0}}
 @keyframes cgSpin{to{transform:rotate(360deg)}}
 @keyframes cgBg{from{filter:brightness(2.4)}to{filter:none}}
@@ -66,12 +77,13 @@
 #gcCg.off{opacity:.55}
 
 /* ---------- 手机竖屏(舞台约 420×(≥600)) ---------- */
-body.mob .cg-art{right:-14%;height:74%;max-width:none}
+body.mob .cg-art{right:-14%;bottom:16%;height:70%;max-width:none}
 body.mob .cg-bar{top:34px;height:34px;padding:0 60px 0 18px;gap:10px}
 body.mob .cg-bar b{font-size:16px;letter-spacing:.2em}
 body.mob .cg-bar span{font-size:11px;letter-spacing:.1em}
 body.mob .cg-info{left:20px;right:16px;bottom:92px;max-width:none}
-body.mob #cgv.chibi .cg-info{top:92px}
+body.mob .cg-wm{font-size:120px;top:12%}
+body.mob .cg-ring{width:420px;height:420px;margin-top:-210px;right:-30%}
 body.mob .cg-stars{font-size:28px;gap:3px}
 body.mob .cg-en{font-size:12px;letter-spacing:.16em;margin-top:8px}
 body.mob .cg-nm{font-size:58px;white-space:normal}
