@@ -10,7 +10,7 @@ AK.RC = ['#b0b0b0', '#9ad24c', '#18b6f2', '#c78bf0', '#f7c33c', '#ff7a1a'];
 AK.RN = ['白', '绿', '蓝', '紫', '金', '橙'];
 AK.PROF = { PIONEER: '先锋', WARRIOR: '近卫', TANK: '重装', SNIPER: '狙击', CASTER: '术师', MEDIC: '医疗', SUPPORT: '辅助', SPECIAL: '特种' };
 AK.POS = { MELEE: '近战位', RANGED: '远程位', ALL: '全域' };
-AK.TITLES = { squad: ['编队', 'SQUAD'], task: ['任务', 'MISSION'], voice: ['角色语音', 'VOICE'], base: ['基建', 'INFRASTRUCTURE'], event: ['活动', 'EVENT'], char: ['创造角色', 'CREATE CHARACTER'] };
+AK.TITLES = { squad: ['编队', 'SQUAD'], task: ['任务', 'MISSION'], voice: ['角色语音', 'VOICE'], base: ['基建', 'INFRASTRUCTURE'], event: ['活动', 'EVENT'], char: ['创造角色', 'CREATE CHARACTER'], gacha: ['干员寻访', 'HEADHUNTING'] };
 AK.esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 AK.stars = r => '★'.repeat(r + 1);
 AK.sleep = ms => new Promise(r => setTimeout(r, ms));
