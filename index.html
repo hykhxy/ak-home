@@ -21,7 +21,7 @@
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@700;900&family=Oswald:wght@300;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@700;900&family=Oswald:wght@300;500;700&display=swap" rel="stylesheet"></noscript>
-<link rel="stylesheet" href="css/style.css?v=6">
+<link rel="stylesheet" href="css/style.css?v=8">
 </head>
 <body>
 
@@ -42,7 +42,7 @@
 </svg>
 
 <!-- 全屏光影背景 -->
-<div id="bgwrap"><div class="px" data-depth="0.012"><div id="bg"></div></div></div>
+<div id="bgwrap"><div class="px" data-depth="0.012"><div id="bg"><div id="bgimg"></div></div></div><div id="fog1" class="fog"></div><div id="fog2" class="fog"></div></div>
 <div class="rays" id="rays1"></div>
 <div class="rays" id="rays2"></div>
 <div id="flare"></div>
@@ -130,8 +130,8 @@
       <div class="cell b" data-go="char" style="left:120px;top:538px;width:240px;height:136px;--d:.8s"><i class="dot" id="chDot">!</i><svg class="ico" id="chIco" style="right:10px;bottom:10px;width:64px;height:64px"><use href="#i-friend"/></svg><img id="chAva" class="chcell-ava" alt=""><div class="tx" style="left:16px;top:18px;font-size:36px">创造角色</div><div class="chcell-n" id="chCellN">尚未创建</div></div>
       <div class="cell b" style="left:366px;top:538px;width:340px;height:136px;--d:.84s">
         <div style="position:absolute;left:5px;right:5px;top:5px;height:30px;background:#454545;font:500 18px/30px var(--sans);padding-left:12px">招募</div>
-        <div data-name="公开招募" style="position:absolute;left:5px;top:40px;width:164px;height:92px;border-right:1px solid #2a8fb0"><svg class="ico" style="left:6px;top:6px;width:44px;height:44px"><use href="#i-doc"/></svg><div class="tx" style="left:10px;bottom:10px;font-size:26px">公开招募</div></div>
-        <div data-name="干员寻访" style="position:absolute;left:171px;top:40px;width:164px;height:92px"><svg class="ico" style="left:6px;top:6px;width:44px;height:44px"><use href="#i-gem"/></svg><div class="tx" style="left:10px;bottom:10px;font-size:26px">干员寻访</div></div>
+        <div data-name="公开招募" data-act="rotate" title="点击切换横屏 / 恢复竖屏" style="position:absolute;left:5px;top:40px;width:164px;height:92px;border-right:1px solid #2a8fb0"><svg class="ico" style="left:6px;top:6px;width:44px;height:44px"><use href="#i-doc"/></svg><div class="tx" style="left:10px;bottom:10px;font-size:26px">公开招募</div><em class="rot-sub"></em></div>
+        <div data-name="干员寻访" data-go="gacha" style="position:absolute;left:171px;top:40px;width:164px;height:92px"><svg class="ico" style="left:6px;top:6px;width:44px;height:44px"><use href="#i-gem"/></svg><div class="tx" style="left:10px;bottom:10px;font-size:26px">干员寻访</div></div>
       </div>
 
       <div class="cell w" data-go="task" style="left:80px;top:694px;width:240px;height:136px;--d:.92s"><span class="bar" style="left:30px;top:-3px;width:180px"></span><i class="dot" id="tkDot"></i><svg class="ico" style="right:12px;bottom:12px;width:80px;height:80px"><use href="#i-task"/></svg><div class="tx" style="left:16px;top:18px;font-size:42px">任务</div></div>
@@ -298,6 +298,34 @@
       </div>
     </div>
   </section>
+
+  <!-- ================== 干员寻访 ================== -->
+  <section class="view" id="v-gacha">
+    <div class="vh">
+      <button class="back" data-go="back"><b>‹</b>返回</button>
+      <div class="vt"><b>干员寻访</b><span>HEADHUNTING</span></div>
+      <div class="vsp"></div>
+      <div class="gc-cur" id="gcCur"></div>
+    </div>
+    <div class="gc-banner" id="gcBanner"></div>
+    <div class="gc-side">
+      <div class="gc-tabs" id="gcTabs"></div>
+      <div class="gc-info" id="gcInfo"></div>
+    </div>
+    <div class="gc-bar">
+      <div class="gc-tools">
+        <button class="btn alt" id="gcDaily">每日补给</button>
+        <button class="btn alt" id="gcRec">寻访记录</button>
+        <button class="btn alt" id="gcRate">概率说明</button>
+      </div>
+      <div class="gc-go">
+        <button class="gc-pull" id="gcP1"><b>寻访一次</b><small id="gcC1"></small></button>
+        <button class="gc-pull ten" id="gcP10"><b>寻访十次</b><small id="gcC10"></small></button>
+      </div>
+    </div>
+    <div class="gc-modal" id="gcModal"></div>
+    <div id="gcRes"></div>
+  </section>
 </div>
 
 <!-- 页面转场 -->
@@ -321,7 +349,7 @@
 <script src="data/lore.js"></script>
 <script src="data/talents.js"></script>
 <script src="js/core.js"></script>
-<script src="js/app.js?v=6"></script>
+<script src="js/app.js?v=8"></script>
 <script src="js/squad.js"></script>
 <script src="js/task.js"></script>
 <script src="js/sortie.js"></script>
@@ -329,6 +357,7 @@
 <script src="js/base.js"></script>
 <script src="js/event.js"></script>
 <script src="js/char.js?v=6"></script>
-<script src="js/mob.js?v=6"></script>
+<script src="js/gacha.js?v=8"></script>
+<script src="js/mob.js?v=8"></script>
 </body>
 </html>
