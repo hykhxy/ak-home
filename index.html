@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Arknights-style Home UI · 学习用复刻</title>
+<meta name="description" content="明日方舟风格主界面 · 学习用复刻:干员、编队、任务、基建、语音、活动、创造角色">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@700;900&family=Oswald:wght@300;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@700;900&family=Oswald:wght@300;500;700&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+ <defs>
+  <symbol id="i-aim" viewBox="0 0 100 100"><g fill="none" stroke="#fff" stroke-width="6"><circle cx="50" cy="50" r="30"/><circle cx="50" cy="50" r="6" fill="#fff"/><path d="M50 4v22M50 74v22M4 50h22M74 50h22"/></g></symbol>
+  <symbol id="i-team" viewBox="0 0 100 100"><g fill="#fff"><circle cx="50" cy="32" r="14"/><path d="M22 84c0-18 12-28 28-28s28 10 28 28z"/><circle cx="20" cy="40" r="9" opacity=".7"/><circle cx="80" cy="40" r="9" opacity=".7"/></g></symbol>
+  <symbol id="i-op" viewBox="0 0 100 100"><g fill="#fff"><circle cx="50" cy="30" r="17"/><path d="M16 90c0-24 15-38 34-38s34 14 34 38z"/></g></symbol>
+  <symbol id="i-shop" viewBox="0 0 100 100"><g fill="none" stroke="#fff" stroke-width="7" stroke-linejoin="round"><path d="M8 18h16l10 46h46l8-34H28"/><circle cx="38" cy="80" r="6" fill="#fff"/><circle cx="72" cy="80" r="6" fill="#fff"/></g></symbol>
+  <symbol id="i-doc" viewBox="0 0 100 100"><g fill="none" stroke="#fff" stroke-width="7"><path d="M24 8h40l16 16v68H24z"/><path d="M36 44h40M36 60h40M36 76h24"/></g></symbol>
+  <symbol id="i-gem" viewBox="0 0 100 100"><path d="M50 6 88 40 50 94 12 40z M12 40h76M50 6 34 40 50 94 66 40z" fill="none" stroke="#fff" stroke-width="6" stroke-linejoin="round"/></symbol>
+  <symbol id="i-task" viewBox="0 0 100 100"><g fill="none" stroke="#fff" stroke-width="7"><rect x="20" y="14" width="60" height="78" rx="2"/><path d="M38 6h24v14H38zM34 48l10 10 20-22" stroke-linejoin="round"/></g></symbol>
+  <symbol id="i-base" viewBox="0 0 100 100"><g fill="none" stroke="#fff" stroke-width="7" stroke-linejoin="round"><path d="M10 46 50 12l40 34"/><path d="M20 40v48h60V40"/><path d="M42 88V62h16v26"/></g></symbol>
+  <symbol id="i-box" viewBox="0 0 100 100"><g fill="none" stroke="#fff" stroke-width="7" stroke-linejoin="round"><path d="M10 30 50 12l40 18v44L50 92 10 74z"/><path d="M10 30l40 18 40-18M50 48v44"/></g></symbol>
+  <symbol id="i-friend" viewBox="0 0 100 100"><g fill="#fff"><circle cx="36" cy="34" r="14"/><circle cx="68" cy="40" r="11"/><path d="M8 84c0-18 12-28 28-28s28 10 28 28zM60 84c0-10 4-20 16-20 10 0 16 8 16 20z"/></g></symbol>
+  <symbol id="i-info" viewBox="0 0 100 100"><g fill="none" stroke="#fff" stroke-width="7"><rect x="10" y="22" width="80" height="58"/><path d="m10 22 40 34 40-34"/></g></symbol>
+ </defs>
+</svg>
+
+<!-- 全屏光影背景 -->
+<div id="bgwrap"><div class="px" data-depth="0.012"><div id="bg"></div></div></div>
+<div class="rays" id="rays1"></div>
+<div class="rays" id="rays2"></div>
+<div id="flare"></div>
+<div id="vignette"></div>
+<canvas id="dust"></canvas>
+<div id="scan"></div>
+<div id="grain"></div>
+
+<div id="stage">
+
+  <!-- ================== 大厅 ================== -->
+  <section class="view on" id="v-lobby">
+    <div class="px" data-depth="0.022">
+      <div id="charwrap">
+        <div id="halo"></div>
+        <div id="floor"></div>
+        <div id="stageFloat"><div id="tilt">
+          <div class="slot" id="slotA"></div>
+          <div class="slot" id="slotB"></div>
+          <div id="sweep"></div>
+        </div></div>
+        <div id="flash"></div>
+        <div id="charHit" class="hit" title="点击立绘切换台词"></div>
+      </div>
+    </div>
+
+    <div class="px" data-depth="0.034" style="z-index:3">
+      <div id="nameplate">
+        <div class="no" id="npNo">R001</div>
+        <div class="nm" id="npNm"></div>
+        <div class="en" id="npEn"></div>
+        <div class="meta"><span class="stars" id="npStars"></span><span class="tag" id="npProf"></span><span class="tag" id="npNa"></span></div>
+      </div>
+      <button class="arrow" id="prevOp" title="上一位 (←)">‹</button>
+      <button class="arrow" id="nextOp" title="下一位 (→)">›</button>
+      <button id="eliteBtn" class="hit" style="display:none">精英二</button>
+      <div id="pager"></div>
+    </div>
+
+    <div class="px" data-depth="0.012">
+     <div id="level">
+      <span class="lvlbl">LV</span>
+      <svg class="ring" viewBox="0 0 115 115"><circle cx="57.5" cy="57.5" r="48" stroke="rgba(255,255,255,.18)"/><circle id="lvring" cx="57.5" cy="57.5" r="48" stroke="#fff" stroke-dasharray="301.6" stroke-dashoffset="301.6" transform="rotate(-90 57.5 57.5)" style="transition:stroke-dashoffset 1.6s 1s var(--ease)"/></svg>
+      <div class="lvnum" id="lvnum">0</div>
+      <div class="tick"></div>
+      <div class="name">Doctor</div>
+      <div class="uid">ID : 37040126</div>
+     </div>
+    </div>
+
+    <div class="px" data-depth="0.02">
+     <div class="menu left">
+      <div class="voice" id="voiceBox" data-t="VOICE"><span id="vtxt"></span><i class="cur"></i><button class="vbtn hit" data-go="voice" title="角色语音 (V)">语音 ▸</button></div>
+      <div class="lrow">
+        <div class="activity" data-go="event"><span class="tg">EVENT</span><i class="dot" id="evDot"></i><div class="t1">泰拉纪事</div><div class="t2" id="evProg">阅读 0/0</div></div>
+        <div class="lcol">
+          <div class="sbtn dark" data-name="好友"><svg class="ico"><use href="#i-friend"/></svg><span class="tx">好友</span></div>
+          <div class="sbtn light" data-name="情报"><svg class="ico"><use href="#i-info"/></svg><span class="tx">情报</span></div>
+        </div>
+      </div>
+     </div>
+    </div>
+
+    <div class="px" data-depth="0.02">
+     <div class="menu right">
+      <div class="top"><span class="ln1"></span><span class="time" id="clock">2026/01/01 00:00</span><span class="bat"><i></i></span><span class="ln2"></span></div>
+      <div class="status"><div class="row">
+        <div class="res"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="15" fill="none" stroke="#fff" stroke-width="3"/><path d="M13 20h14M20 13v14" stroke="#fff" stroke-width="3"/></svg><b data-n="1000">0</b></div>
+        <div class="res"><svg viewBox="0 0 40 40"><path d="M20 3 33 11v18L20 37 7 29V11z" fill="none" stroke="#ff9d4a" stroke-width="3"/><path d="M20 12v16" stroke="#ff9d4a" stroke-width="3"/></svg><b data-n="1000">0</b><span class="plus">+</span></div>
+        <div class="res"><svg viewBox="0 0 40 40"><path d="M20 3 33 20 20 37 7 20z" fill="none" stroke="#ff5e19" stroke-width="3"/></svg><b data-n="125">0</b><span class="plus">+</span></div>
+      </div></div>
+
+      <div class="cell w" id="op" data-act="sortie" style="--d:.6s">
+        <span class="bar"></span>
+        <div class="sanity"><small>SAN</small><div class="v" id="san">0</div><div class="m">/135</div></div>
+        <svg class="ico" width="170" height="170" style="left:530px;top:30px;opacity:.14;filter:invert(1)"><use href="#i-aim"/></svg>
+        <div class="tx">作战</div>
+        <div class="cur2"><em>当前</em><span>R-07 &nbsp;静默回廊</span></div>
+      </div>
+
+      <div class="cell w" data-go="squad" style="left:40px;top:382px;width:280px;height:136px;--d:.68s"><svg class="ico" style="right:14px;bottom:12px;width:80px;height:80px"><use href="#i-team"/></svg><div class="tx" style="left:16px;top:18px;font-size:42px">编队</div></div>
+      <div class="cell g" data-go="ops" style="left:336px;top:382px;width:280px;height:136px;--d:.72s"><svg class="ico" style="right:14px;bottom:12px;width:80px;height:80px"><use href="#i-op"/></svg><div class="tx" style="left:16px;top:18px;font-size:42px">干员</div><div class="tx" style="left:16px;top:84px;font:500 20px var(--sans);color:#989898">角色管理</div></div>
+      <div class="cell k" style="left:632px;top:382px;width:200px;height:136px;--d:.76s"></div>
+
+      <div class="cell b" data-go="char" style="left:120px;top:538px;width:240px;height:136px;--d:.8s"><i class="dot" id="chDot">!</i><svg class="ico" id="chIco" style="right:10px;bottom:10px;width:64px;height:64px"><use href="#i-friend"/></svg><img id="chAva" class="chcell-ava" alt=""><div class="tx" style="left:16px;top:18px;font-size:36px">创造角色</div><div class="chcell-n" id="chCellN">尚未创建</div></div>
+      <div class="cell b" style="left:366px;top:538px;width:340px;height:136px;--d:.84s">
+        <div style="position:absolute;left:5px;right:5px;top:5px;height:30px;background:#454545;font:500 18px/30px var(--sans);padding-left:12px">招募</div>
+        <div data-name="公开招募" style="position:absolute;left:5px;top:40px;width:164px;height:92px;border-right:1px solid #2a8fb0"><svg class="ico" style="left:6px;top:6px;width:44px;height:44px"><use href="#i-doc"/></svg><div class="tx" style="left:10px;bottom:10px;font-size:26px">公开招募</div></div>
+        <div data-name="干员寻访" style="position:absolute;left:171px;top:40px;width:164px;height:92px"><svg class="ico" style="left:6px;top:6px;width:44px;height:44px"><use href="#i-gem"/></svg><div class="tx" style="left:10px;bottom:10px;font-size:26px">干员寻访</div></div>
+      </div>
+
+      <div class="cell w" data-go="task" style="left:80px;top:694px;width:240px;height:136px;--d:.92s"><span class="bar" style="left:30px;top:-3px;width:180px"></span><i class="dot" id="tkDot"></i><svg class="ico" style="right:12px;bottom:12px;width:80px;height:80px"><use href="#i-task"/></svg><div class="tx" style="left:16px;top:18px;font-size:42px">任务</div></div>
+      <div class="cell g" data-go="base" style="left:336px;top:694px;width:240px;height:136px;--d:.96s"><i class="dot" id="bsDot"></i><svg class="ico" style="right:12px;bottom:12px;width:80px;height:80px"><use href="#i-base"/></svg><div class="tx" style="left:16px;top:18px;font-size:42px">基建</div></div>
+      <div class="cell d" data-go="depot" style="left:592px;top:694px;width:130px;height:136px;--d:1s"><svg class="ico" style="left:40px;top:62px;width:50px;height:50px"><use href="#i-box"/></svg><div class="tx" style="left:16px;top:14px;font-size:30px">仓库</div></div>
+     </div>
+    </div>
+  </section>
+
+  <!-- ================== 干员 ================== -->
+  <section class="view" id="v-ops">
+    <div class="vh">
+      <button class="back" data-go="lobby"><b>‹</b>返回</button>
+      <div class="vt"><b>干员</b><span>OPERATOR</span></div>
+      <div class="vsp"></div>
+      <div class="cnt"><b id="oCnt">0</b> / <span id="oTot">0</span></div>
+      <input class="search" id="oSearch" placeholder="搜索 名称 / 英文 / 编号 / 标签 ( / )" autocomplete="off">
+    </div>
+    <div class="filters">
+      <div class="frow" id="oProf"><span class="lb">职业</span></div>
+      <div class="frow" id="oRar"><span class="lb">稀有度</span></div>
+    </div>
+    <div class="gridwrap" id="oWrap"><div class="ogrid" id="oGrid"></div></div>
+    <div class="detail" id="oDet"></div>
+  </section>
+
+  <!-- ================== 仓库 ================== -->
+  <section class="view" id="v-depot">
+    <div class="vh">
+      <button class="back" data-go="lobby"><b>‹</b>返回</button>
+      <div class="vt"><b>仓库</b><span>DEPOT</span></div>
+      <div class="vsp"></div>
+      <div class="cnt"><b id="iCnt">0</b> / <span id="iTot">0</span></div>
+      <input class="search" id="iSearch" placeholder="搜索 道具名称 / 用途 ( / )" autocomplete="off">
+    </div>
+    <div class="filters">
+      <div class="frow" id="iType"><span class="lb">分类</span></div>
+      <div class="frow" id="iRar"><span class="lb">稀有度</span></div>
+    </div>
+    <div class="gridwrap" id="iWrap"><div class="igrid" id="iGrid"></div></div>
+    <div class="detail" id="iDet"></div>
+  </section>
+
+  <!-- ================== 编队 ================== -->
+  <section class="view" id="v-squad">
+    <div class="vh">
+      <button class="back" data-go="lobby"><b>‹</b>返回</button>
+      <div class="vt"><b>编队</b><span>SQUAD</span></div>
+      <div class="vsp"></div>
+      <div class="cnt"><b id="sqCnt">0</b> / 12</div>
+      <button class="btn go" data-act="sortie">出击 ▸</button>
+    </div>
+    <div class="sqbar" id="sqBar"></div>
+    <div class="sqgrid" id="sqGrid"></div>
+    <div class="sqstat" id="sqStat"></div>
+    <div class="detail picker" id="sqPick">
+      <div class="pkh">
+        <input class="search" id="sqSearch" placeholder="搜索干员 ( / ) · 点击加入 / 移出 · 可拖入左侧队伍栏" autocomplete="off" style="width:100%">
+        <div class="frow" id="sqProf"></div>
+        <div class="frow" id="sqRar"></div>
+      </div>
+      <div class="pkgrid" id="sqRoster"></div>
+    </div>
+  </section>
+
+  <!-- ================== 任务 ================== -->
+  <section class="view" id="v-task">
+    <div class="vh">
+      <button class="back" data-go="lobby"><b>‹</b>返回</button>
+      <div class="vt"><b>任务</b><span>MISSION</span></div>
+      <div class="vsp"></div>
+      <div class="cnt">可领取 <b id="tkReady">0</b></div>
+      <button class="btn go" id="tkAll">一键领取</button>
+    </div>
+    <div class="filters">
+      <div class="frow" id="tkTabs"><span class="lb">类型</span></div>
+      <div class="frow" id="tkInfo"></div>
+    </div>
+    <div class="gridwrap" id="tkWrap"><div class="tklist" id="tkList"></div></div>
+    <div class="detail" id="tkSide"></div>
+  </section>
+
+  <!-- ================== 基建 ================== -->
+  <section class="view" id="v-base">
+    <div class="vh">
+      <button class="back" data-go="lobby"><b>‹</b>返回</button>
+      <div class="vt"><b>基建</b><span>INFRASTRUCTURE</span></div>
+      <div class="vsp"></div>
+      <div class="bs-stat" id="bsStat"></div>
+      <button class="btn" id="bsAuto" title="按干员基建技能自动分配,疲劳干员回宿舍">智能排班</button>
+      <button class="btn go" id="bsAll">收获全部</button>
+    </div>
+    <div class="bs-map" id="bsMap"></div>
+    <div class="detail" id="bsDet"></div>
+    <div id="bsPick"></div>
+  </section>
+
+  <!-- ================== 创造角色 ================== -->
+  <section class="view" id="v-char">
+    <div class="vh">
+      <button class="back" data-go="lobby"><b>‹</b>返回</button>
+      <div class="vt"><b>创造角色</b><span>CREATE CHARACTER</span></div>
+      <div class="vsp"></div>
+      <span class="ch-dirty" id="chDirty"></span>
+      <button class="btn alt" id="chSwitch" data-ch="switch">切换身份</button>
+      <button class="btn go" id="chSave" data-ch="save">保存角色</button>
+    </div>
+    <div class="gridwrap ch-body" id="chBody"></div>
+    <div class="detail ch-detail" id="chSide"></div>
+    <input type="file" id="chFile" accept="image/*" hidden>
+  </section>
+
+  <!-- ================== 活动 ================== -->
+  <section class="view" id="v-event">
+    <div class="vh">
+      <button class="back" data-go="lobby"><b>‹</b>返回</button>
+      <div class="vt"><b>泰拉纪事</b><span>CHRONICLES OF TERRA</span></div>
+      <div class="vsp"></div>
+      <div class="cnt">纪事印记 <b id="evTk">0</b></div>
+    </div>
+    <div class="filters"><div class="frow" id="evTabs"></div></div>
+    <div class="gridwrap ev-body" id="evBody"></div>
+    <div class="detail" id="evSide"></div>
+  </section>
+
+  <!-- ================== 角色语音 ================== -->
+  <section class="view" id="v-voice">
+    <div class="vh">
+      <button class="back" data-go="back"><b>‹</b>返回</button>
+      <div class="vt"><b>角色语音</b><span>VOICE</span></div>
+      <div class="vsp"></div>
+      <div class="cnt"><b id="vcCnt">0</b> 条</div>
+      <input class="search" id="vcSearch" placeholder="搜索台词 / 标题 · 回车跳转干员 ( / )" autocomplete="off">
+    </div>
+    <div id="vcArt">
+      <div class="vhalo"></div>
+      <img id="vcImg" alt="" draggable="false">
+      <button class="arrow" id="vcPrev">‹</button>
+      <button class="arrow" id="vcNext">›</button>
+      <div class="vcinfo" id="vcInfo"></div>
+    </div>
+    <div class="vcright">
+      <div class="frow" id="vcTabs"></div>
+      <div class="vclist" id="vcList"></div>
+    </div>
+    <div id="vcPlayer">
+      <img id="vcAva" alt="">
+      <div class="pl-main">
+        <div class="pl-t"><b id="plTitle">—</b><span id="plSub"></span></div>
+        <div class="pl-x" id="plText">选择右侧台词开始播放</div>
+        <canvas id="plWave" width="900" height="40"></canvas>
+      </div>
+      <div class="pl-ctl">
+        <button class="btn" id="plPlay">▶ 播放</button>
+        <label class="tg"><input type="checkbox" id="plTts"> 朗读</label>
+        <select id="plVoice" class="sel"></select>
+        <label class="rg">语速<input type="range" id="plRate" min="0.6" max="1.6" step="0.05"></label>
+        <label class="rg">音调<input type="range" id="plPitch" min="0.5" max="1.7" step="0.05"></label>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- 页面转场 -->
+<div id="wipe">
+  <div class="l" id="wipeC"></div>
+  <div class="l" id="wipeD"></div>
+  <div id="wipeT"><b id="wtB">干员</b><span id="wtS">OPERATOR</span><i id="wtI"></i></div>
+</div>
+
+<div id="hint"><b>ARKNIGHTS-STYLE HOME UI</b> · 学习用复刻 · 素材版权归鹰角网络<br>← → 切换干员 · 点击立绘换台词 · <b>Esc</b> 返回 · <b>M</b> 静音 · 拖入图片可临时替换立绘</div>
+<div id="toast"></div>
+<div id="drop">松开以替换立绘</div>
+<div id="loader"><div class="box"><div class="t">CONNECTING TO RHODES ISLAND…</div><div class="bar2"><i id="lbar"></i></div><div class="p" id="lp">0%</div><div class="s" id="ls"></div></div></div>
+
+<script src="data/operators.js"></script>
+<script src="data/items.js"></script>
+<script src="data/voices.js"></script>
+<script src="data/missions.js"></script>
+<script src="data/vclips.js"></script>
+<script src="data/base.js"></script>
+<script src="data/lore.js"></script>
+<script src="data/talents.js"></script>
+<script src="js/core.js"></script>
+<script src="js/app.js"></script>
+<script src="js/squad.js"></script>
+<script src="js/task.js"></script>
+<script src="js/sortie.js"></script>
+<script src="js/voice.js"></script>
+<script src="js/base.js"></script>
+<script src="js/event.js"></script>
+<script src="js/char.js"></script>
+</body>
+</html>
