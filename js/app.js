@@ -15,8 +15,23 @@ const dur = ms => RM ? 1 : ms;
 
 /* ================= 舞台缩放 ================= */
 const stage = $('#stage');
-function fit() { stage.style.transform = `translate(-50%,-50%) scale(${Math.min(innerWidth / 1920, innerHeight / 1080)})`; }
+/* 桌面:固定 1920×1080 等比缩放。手机(窄竖屏):舞台宽约 420 设计像素、高随屏幕,走 body.mob 的竖向布局(见 css 末尾) */
+const MOB_W = 420, MOB_MIN_H = 600;
+const isMob = () => innerWidth <= 900 && innerWidth / innerHeight <= 1;
+function fit() {
+  const m = isMob();
+  document.body.classList.toggle('mob', m);
+  if (m) {
+    const s = Math.min(innerWidth / MOB_W, innerHeight / MOB_MIN_H);
+    stage.style.width = (innerWidth / s) + 'px'; stage.style.height = (innerHeight / s) + 'px';
+    stage.style.transform = `translate(-50%,-50%) scale(${s})`;
+  } else {
+    stage.style.width = stage.style.height = '';
+    stage.style.transform = `translate(-50%,-50%) scale(${Math.min(innerWidth / 1920, innerHeight / 1080)})`;
+  }
+}
 addEventListener('resize', fit); fit();
+AK.isMob = isMob;
 
 /* ================= 主色 → CSS 变量(@property 过渡) ================= */
 const root = document.documentElement;
