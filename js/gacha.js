@@ -190,8 +190,15 @@ function pull(n) {
   pay(plan);
   const list = doPull(cur, n);
   AK.emit && AK.emit('gacha', list);
-  playResult(list, n);
+  /* 五星及以上:先播放出货 CG(Spine 动态立绘 / 小人演出),全部播完或跳过后再进入翻牌结果 */
+  const hi = list.filter(x => x.r >= 4);
+  if (G.cg !== false && hi.length && AK.cg && AK.cg.supported()) {
+    busy = true;
+    AK.cg.run(hi, cur).catch(() => 0).then(() => playResult(list, n));
+  } else playResult(list, n);
 }
+function renderCgBtn() { const b = $('#gcCg'); if (!b) return; const on = G.cg !== false; b.textContent = '出货 CG：' + (on ? '开' : '关'); b.classList.toggle('off', !on); }
+$('#gcCg').addEventListener('click', () => { G.cg = G.cg === false; AK.save(); renderCgBtn(); AK.toast(G.cg === false ? '已关闭出货 CG' : '已开启出货 CG(五星及以上出货时播放)'); });
 $('#gcP1').addEventListener('click', () => pull(1));
 $('#gcP10').addEventListener('click', () => pull(10));
 AK.sub('inv', () => { if (AK.view() === 'gacha') renderCur(); });
@@ -199,5 +206,5 @@ AK.sub('inv', () => { if (AK.view() === 'gacha') renderCur(); });
 /* 背景图:加载成功后再淡入(没有图时保持原来的渐变背景) */
 { const im = new Image(); im.onload = () => { const b = document.getElementById('bgimg'); if (b) b.classList.add('on'); }; im.src = 'assets/bg/city.jpg'; }
 
-AK.enter.gacha = () => { AK.rollover(); busy = false; res.className = ''; res.innerHTML = ''; modal.classList.remove('on'); renderAll(); };
+AK.enter.gacha = () => { AK.rollover(); busy = false; res.className = ''; res.innerHTML = ''; modal.classList.remove('on'); renderAll(); renderCgBtn(); if (AK.cg && G.cg !== false) AK.cg.warm(); };
 })();
