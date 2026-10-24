@@ -1,12 +1,13 @@
 // ==UserScript==
 // @name         罗德岛档案终端 · 悬浮球（主角 / NPC / 武器 / 记忆宫殿）
 // @namespace    https://hykhxy.github.io/ak-home/
-// @version      1.0.0
+// @version      1.1.0
 // @description  在 talkaicc 聊天页右上角加一个悬浮球：主角立绘(可本地上传保存)、NPC 立绘与档案、武器详述、记忆宫殿。数据只存在本机浏览器。
 // @author       ak-home
 // @match        https://talkaicc.com/*
 // @match        https://*.talkaicc.com/*
 // @run-at       document-idle
+// @noframes
 // @grant        none
 // @downloadURL  https://hykhxy.github.io/ak-home/ak-palace.user.js
 // @updateURL    https://hykhxy.github.io/ak-home/ak-palace.user.js
@@ -15,6 +16,11 @@
   'use strict';
   if (window.__akPal) return;
   window.__akPal = 1;
+  // 嵌入模式: 在 GitHub Pages 的网页版(palace.html)里使用, 供卡片 introPage 里的 iframe 加载; 油猴版为 false
+  const EMBED = !!window.AK_PALACE_EMBED;
+  const T_INS = EMBED ? '复制设定' : '插入聊天输入框';
+  const T_ROOM = EMBED ? '复制本房间' : '注入本房间';
+  const T_MEM = EMBED ? '复制' : '注入输入框';
 
   /* ============================== 基础工具 ============================== */
   const ART = 'https://hykhxy.github.io/ak-home/assets/art/';
@@ -300,6 +306,7 @@
 
   /* ============================== 注入输入框 ============================== */
   function toChat(text) {
+    if (EMBED) { copyText(text); toast('已复制 · 回到聊天页，在输入框里粘贴即可'); return; }
     const ta = [...document.querySelectorAll('textarea')].find((t) => /输入/.test(t.placeholder || '')) || document.querySelector('textarea');
     if (!ta) { copyText(text); toast('没找到输入框，已复制到剪贴板'); return; }
     const setter = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value').set;
@@ -442,8 +449,8 @@
       h('div', { class: 'colR' },
         h('div', { class: 'ttl' }, h('b', {}, '主角档案'), h('small', {}, '立绘放左边；所有内容自动保存在本机')),
         actions(
-          h('button', { class: 'pri', onclick: () => toChat(fmtEnt('主角设定', e, HERO_F)) }, '插入聊天输入框'),
-          h('button', { onclick: () => copyText(fmtEnt('主角设定', e, HERO_F)).then(() => toast('已复制')) }, '复制设定')),
+          h('button', { class: 'pri', onclick: () => toChat(fmtEnt('主角设定', e, HERO_F)) }, T_INS),
+          h('button', { class: 'dupx', onclick: () => copyText(fmtEnt('主角设定', e, HERO_F)).then(() => toast('已复制')) }, '复制设定')),
         form(e, HERO_F)));
   }
 
@@ -467,7 +474,7 @@
       h('div', { class: 'colR' },
         h('div', { class: 'ttl' }, h('b', {}, cur.name || 'NPC'), h('small', {}, cur.role || '')),
         actions(
-          h('button', { class: 'pri', onclick: () => toChat(fmtEnt('NPC设定·' + (cur.name || ''), cur, NPC_F)) }, '插入聊天输入框'),
+          h('button', { class: 'pri', onclick: () => toChat(fmtEnt('NPC设定·' + (cur.name || ''), cur, NPC_F)) }, T_INS),
           h('button', { onclick: () => copyText(fmtEnt('NPC设定·' + (cur.name || ''), cur, NPC_F)).then(() => toast('已复制')) }, '复制'),
           h('button', { class: 'dg', onclick: () => { if (confirm('删除 NPC「' + (cur.name || '') + '」？')) { S.npcs = S.npcs.filter((x) => x !== cur); save(); render(); } } }, '删除')),
         form(cur, NPC_F, (k) => { if (k === 'name' || k === 'role') { const li = root.querySelector('.li.on .tx'); if (li) { li.firstChild.textContent = cur.name || '（未命名）'; li.lastChild.textContent = cur.role || cur.code || ''; } } })))
@@ -503,7 +510,7 @@
         h('div', { class: 'colR' },
           h('div', { class: 'ttl' }, h('b', {}, cur.name || '武器'), h('small', {}, stars(cur.rank || 1))),
           actions(
-            h('button', { class: 'pri', onclick: () => toChat(fmt()) }, '插入聊天输入框'),
+            h('button', { class: 'pri', onclick: () => toChat(fmt()) }, T_INS),
             h('button', { onclick: () => copyText(fmt()).then(() => toast('已复制')) }, '复制'),
             h('button', { class: 'dg', onclick: () => { if (confirm('删除武器「' + (cur.name || '') + '」？')) { S.weapons = S.weapons.filter((x) => x !== cur); save(); render(); } } }, '删除')),
           h('label', { class: 'f' }, h('span', {}, '品阶'), select([[1, '★ 1'], [2, '★★ 2'], [3, '★★★ 3'], [4, '★★★★ 4'], [5, '★★★★★ 5'], [6, '★★★★★★ 6']], cur.rank || 4, (v) => { cur.rank = +v; save(); render(); })),
@@ -592,7 +599,7 @@
         h('button', { onclick: () => { U.pal.view = 'map'; drawPal(); } }, '← 平面图'),
         select(rooms.map((x, i) => [x.id, pad(i + 1) + ' ' + x.icon + ' ' + x.name]), r.id, (v) => { U.pal.room = v; drawPal(); }),
         h('button', { onclick: () => move(-1), title: '在动线上前移' }, '◀'), h('button', { onclick: () => move(1), title: '在动线上后移' }, '▶'),
-        h('button', { onclick: () => toChat(roomText(r)) }, '注入本房间'),
+        h('button', { onclick: () => toChat(roomText(r)) }, T_ROOM),
         h('button', { class: 'dg', onclick: () => { if (confirm('删除房间「' + r.name + '」及其 ' + r.mem.length + ' 条记忆？')) { P().rooms = rooms.filter((x) => x !== r); save(); drawPal(); } } }, '删除房间')),
       h('div', { class: 'rform' },
         h('label', { class: 'f s' }, h('span', {}, '图标'), h('input', { value: r.icon, oninput: (e) => { r.icon = e.target.value; save(); } })),
@@ -633,7 +640,7 @@
     card.append(h('div', { class: 'macts' },
       h('span', { class: 'meta' }, '复习 ' + (m.n || 0) + ' 次 · ' + dueText(m)),
       h('button', { onclick: () => { m.n = (m.n || 0) + 1; m.last = now(); save(); drawPal(); toast('已复习，' + dueText(m)); } }, '✓ 复习过了'),
-      h('button', { onclick: () => toChat(memText({ m, r })) }, '注入输入框'),
+      h('button', { onclick: () => toChat(memText({ m, r })) }, T_MEM),
       h('button', { class: 'dg', onclick: () => { if (confirm('删除这条记忆？')) { r.mem = r.mem.filter((x) => x !== m); save(); drawPal(); } } }, '删除')));
     return card;
   }
@@ -871,11 +878,13 @@ select option{background:#101820}
   .split{grid-template-columns:1fr}.list{position:static}.li-wrap{max-height:150px}
   .form,.mform,.tool{grid-template-columns:1fr}.rform{grid-template-columns:1fr 1fr}
   .tabs button{padding:7px 12px;font-size:14px}.hd h1 small{display:none}
-}`;
+}
+.win.emb{display:flex!important;position:fixed!important;inset:0!important;top:0!important;left:0!important;right:0!important;width:100%!important;height:100%!important;border:0;border-top:3px solid #ff7a2e;box-shadow:none;animation:none}
+.win.emb .hd{cursor:default}.win.emb .hd .x,.win.emb .dupx{display:none}`;
 
   /* ============================== 挂载 ============================== */
   function placeBall() {
-    if (!ball) return;
+    if (!ball || EMBED) return;
     const on = /^\/chat(\/|$)/.test(location.pathname);
     host.style.display = on ? '' : 'none';
     if (!on) { if (U.open) toggle(false); return; }
@@ -924,13 +933,14 @@ select option{background:#101820}
     footEl = h('div', { class: 'ft' }, '已就绪');
     toastEl = h('div', { class: 'toast' });
     const hd = h('div', { class: 'hd' }, h('h1', {}, '罗德岛档案终端', h('small', {}, 'ARCHIVE TERMINAL')), h('div', { class: 'sp' }),
-      h('button', { onclick: exportAll }, '导出'), h('button', { onclick: importAll }, '导入'), h('button', { onclick: () => toggle(false) }, '✕'));
+      h('button', { onclick: exportAll }, '导出'), h('button', { onclick: importAll }, '导入'), h('button', { class: 'x', onclick: () => toggle(false) }, '✕'));
     win = h('div', { class: 'win' }, hd, h('div', { class: 'tabs' }), body, footEl, toastEl);
-    root.append(ball, win);
+    if (EMBED) { win.classList.add('emb'); root.append(win); } else root.append(ball, win);
     document.documentElement.appendChild(host);
     dragify(hd, win);
     placeBall(); updateBadge();
-    setInterval(placeBall, 700);
+    if (EMBED) toggle(true);
+    else setInterval(placeBall, 700);
     window.addEventListener('resize', placeBall);
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && U.open) { const ov = root.querySelector('.ov'); if (ov) ov.remove(); else toggle(false); } });
     window.__akPalApi = { get state() { return S; }, open: () => toggle(true), toChat };
