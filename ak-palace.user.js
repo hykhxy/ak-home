@@ -402,7 +402,9 @@
       const th = h('div', { class: 'thumbs' }, ent.pics.map((p) => h('img', {
         src: p.src, class: p === cur ? 'on' : '', onclick: () => { ent.act = p.id; save(); draw(); },
       })));
-      box.append(stage, bar, ent.pics.length > 1 ? th : null, file);
+      box.append(stage, bar);
+      if (ent.pics.length > 1) box.append(th);
+      box.append(file);
     }
     draw();
     return box;
@@ -904,7 +906,9 @@ select option{background:#101820}
   }
 
   async function boot() {
-    try { await DB.open(); S = await DB.get('state'); } catch (e) { S = null; }
+    // IndexedDB 偶尔会被隐私模式/权限拦住而一直不回调: 超时后放弃, 改用 localStorage 后备, 保证球一定出现
+    const tmo = (p, ms) => Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), ms))]);
+    try { await tmo(DB.open(), 2500); S = await tmo(DB.get('state'), 2500); } catch (e) { DB.db = null; S = null; }
     if (!S) { try { S = JSON.parse(localStorage.getItem('ak-palace-fallback') || 'null'); } catch (e) { S = null; } }
     const first = !S;
     S = normalize(S);
