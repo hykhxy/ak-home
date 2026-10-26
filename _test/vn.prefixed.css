@@ -341,7 +341,7 @@
 .custom-styles .hb-cap{position:absolute;left:0;bottom:0;right:0;z-index:3;padding:7px 16px;font:700 12px var(--vn-cond);letter-spacing:.24em;color:#e9f1f6;
   background:linear-gradient(90deg,rgba(10,15,20,.95),transparent);border-left:4px solid var(--a)}
 .custom-styles .hb-cap::before{content:"OPERATOR // ";color:var(--a)}
-.custom-styles .hb-main:has(.hb-card[open]) .hb-stage{visibility:hidden}
+.custom-styles .hb-main:has(.hb-card[open]) .hb-stage,.custom-styles .hb-main:has(.sm input:checked) .hb-stage{visibility:hidden}
 
 /* ---- 右侧功能卡 ---- */
 .custom-styles .hb-menu{display:flex;flex-direction:column;justify-content:center;gap:14px;padding:16px 18px 16px 6px}
@@ -352,25 +352,30 @@
 .custom-styles .hb-card.story{order:2;--c:var(--vn-org);--ml:0px;
   background:linear-gradient(225deg,#070a0e 15px,transparent 15px),linear-gradient(110deg,rgba(46,27,14,.96),rgba(12,14,18,.92))}
 .custom-styles .hb-card:not([open]):hover{margin-left:calc(var(--ml,0px) - 10px)}
-.custom-styles .hb-card summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:14px;padding:14px 22px 14px 18px}
+/* 剧情卡(.story)不再用 <details>: 用 label.sm + 隐藏 checkbox 当开关, 这样「直接出文」模式不用展开也能显示正文 */
+.custom-styles .hb-card summary,.custom-styles .hb-card .sm{list-style:none;cursor:pointer;display:flex;align-items:center;gap:14px;padding:14px 22px 14px 18px}
 .custom-styles .hb-card summary::-webkit-details-marker{display:none}
 .custom-styles .hb-card summary::marker{content:""}
-.custom-styles .hb-card summary>div{flex:1}
-.custom-styles .hb-card summary small{display:block;font:700 10px var(--vn-cond);letter-spacing:.34em;color:var(--c)}
-.custom-styles .hb-card summary b{display:block;font-size:22px;font-weight:900;letter-spacing:.24em;color:#fff}
-.custom-styles .hb-card.story summary b{font-size:26px;letter-spacing:.14em;margin:2px 0}
-.custom-styles .hb-card summary em{display:block;margin-top:3px;font-size:13px;letter-spacing:.06em;color:#9fb2bf}
-.custom-styles .hb-card summary i{padding:4px 16px;font:800 11px var(--vn-cond);letter-spacing:.2em;color:var(--c);border:1px solid var(--c);
+.custom-styles .hb-card .sm input{display:none}
+.custom-styles .hb-card summary>div,.custom-styles .hb-card .sm>div{flex:1}
+.custom-styles .hb-card summary small,.custom-styles .hb-card .sm small{display:block;font:700 10px var(--vn-cond);letter-spacing:.34em;color:var(--c)}
+.custom-styles .hb-card summary b,.custom-styles .hb-card .sm b{display:block;font-size:22px;font-weight:900;letter-spacing:.24em;color:#fff}
+.custom-styles .hb-card.story summary b,.custom-styles .hb-card.story .sm b{font-size:26px;letter-spacing:.14em;margin:2px 0}
+.custom-styles .hb-card summary em,.custom-styles .hb-card .sm em{display:block;margin-top:3px;font-size:13px;letter-spacing:.06em;color:#9fb2bf}
+.custom-styles .hb-card summary i,.custom-styles .hb-card .sm>i{padding:4px 16px;font:800 11px var(--vn-cond);letter-spacing:.2em;color:var(--c);border:1px solid var(--c);
   clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);transition:background .2s,color .2s}
-.custom-styles .hb-card summary:hover i{background:var(--c);color:#071017}
+.custom-styles .hb-card summary:hover i,.custom-styles .hb-card .sm:hover>i{background:var(--c);color:#071017}
+.custom-styles .hb-card.story:not(:has(.sm input:checked)):hover{margin-left:calc(var(--ml,0px) - 10px)}
+.custom-styles .hb-card.story:has(.sm input:checked){margin-left:0}
 
 /* 展开: 卡片消失, summary 变成右上角返回按钮, 内容铺满 .hb-main */
-.custom-styles .hb-card[open]{background:none;border:0;margin:0;min-height:0}
-.custom-styles .hb-card[open]>summary{position:absolute;right:16px;top:14px;z-index:60;padding:0;display:block}
-.custom-styles .hb-card[open]>summary>div{display:none}
-.custom-styles .hb-card[open]>summary>i{font-size:0;padding:7px 20px;background:var(--c);color:#071017;border:0;clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);box-shadow:0 0 18px rgba(0,0,0,.5)}
-.custom-styles .hb-card[open]>summary>i::after{content:"✕ 返回舰桥";font:800 13px var(--vn-font);letter-spacing:.2em}
+.custom-styles .hb-card[open],.custom-styles .hb-card.story:has(.sm input:checked){background:none;border:0;margin:0;min-height:0}
+.custom-styles .hb-card[open]>summary,.custom-styles .hb-card.story:has(.sm input:checked)>.sm{position:absolute;right:16px;top:14px;z-index:60;padding:0;display:block}
+.custom-styles .hb-card[open]>summary>div,.custom-styles .hb-card.story:has(.sm input:checked)>.sm>div{display:none}
+.custom-styles .hb-card[open]>summary>i,.custom-styles .hb-card.story:has(.sm input:checked)>.sm>i{font-size:0;padding:7px 20px;background:var(--c);color:#071017;border:0;clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);box-shadow:0 0 18px rgba(0,0,0,.5)}
+.custom-styles .hb-card[open]>summary>i::after,.custom-styles .hb-card.story:has(.sm input:checked)>.sm>i::after{content:"✕ 返回舰桥";font:800 13px var(--vn-font);letter-spacing:.2em}
 .custom-styles .hb-card .pop,.custom-styles .hb-card .stg{position:absolute;inset:0;z-index:30;animation:vnIn .3s both}
+.custom-styles .hb-card.story:not(:has(.sm input:checked)) .stg{display:none}
 
 
 /* ---- 观测日志 · 战术地图 ---- */
@@ -423,8 +428,8 @@
 .custom-styles .stg::after{content:"";position:absolute;inset:0;z-index:4;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.14) 0 1px,transparent 1px 3px),radial-gradient(ellipse at 50% 50%,transparent 55%,rgba(0,0,0,.55))}
 .custom-styles .stg .sl{display:none;position:absolute;inset:0;overflow:hidden;animation:slIn .35s both}
 .custom-styles .stg .v0{display:none}
-.custom-styles .stg .v0+.sl,.custom-styles .stg .sl:has(input:checked)+.sl{display:block}
-.custom-styles .stg .sl:has(input:checked){display:none!important}
+.custom-styles .stg:not(:has(.rp input:checked)) .v0+.sl,.custom-styles .stg:not(:has(.rp input:checked)) .sl:has(input:checked)+.sl{display:block}
+.custom-styles .stg:not(:has(.rp input:checked)) .sl:has(input:checked){display:none!important}
 @keyframes slIn{from{opacity:0}to{opacity:1}}
 .custom-styles .sl input{display:none}
 .custom-styles .sl .hit{position:absolute;inset:0;z-index:10;display:block;cursor:pointer}
@@ -519,7 +524,7 @@
 .custom-styles .sl.end .ed{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center}
 .custom-styles .sl.end .ed b{display:block;font-size:26px;font-weight:900;letter-spacing:.4em;color:#fff}
 .custom-styles .sl.end .ed em{display:block;margin-top:10px;font-size:14px;letter-spacing:.2em;color:var(--vn-cyan)}
-.custom-styles .stg .sl:has(input:checked)+.sl.end{display:block}
+.custom-styles .stg:not(:has(.rp input:checked)) .sl:has(input:checked)+.sl.end{display:block}
 
 /* ---- 行动选项: AI 把【选】写进剧情里时, 不能漂在舞台上方挡画面 ----
    舞台是纵向 flex, 绝对定位的页不占位; 选项(普通流)只在最后一页出现, 贴着舞台底部排列 */
@@ -550,7 +555,7 @@
 @media (max-width:760px){
   .custom-styles .hb-main{grid-template-columns:1fr;min-height:600px}
   .custom-styles .hb-stage{height:300px}
-  .custom-styles .hb-main:has(.hb-card[open]) .hb-stage{display:none}
+  .custom-styles .hb-main:has(.hb-card[open]) .hb-stage,.custom-styles .hb-main:has(.sm input:checked) .hb-stage{display:none}
   .custom-styles .hb-menu{padding:8px 10px 14px}
   .custom-styles .hb-card{--ml:0px!important}
   .custom-styles .hb-chips{margin-left:0;width:100%}
@@ -1364,10 +1369,15 @@
 }
 
 /* ---------- ② 沉浸式体验 ---------- */
-.custom-styles .imm-t,.custom-styles .imm-d{display:inline-flex;align-items:center;gap:6px;cursor:pointer;user-select:none;padding:5px 16px 5px 14px;
+.custom-styles .imm-t,.custom-styles .imm-d,.custom-styles .imm-m{display:inline-flex;align-items:center;gap:6px;cursor:pointer;user-select:none;padding:5px 16px 5px 14px;white-space:nowrap;
   font:800 12px var(--vn-cond);letter-spacing:.16em;color:#071017;background:var(--vn-cyan);clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);transition:filter .15s}
-.custom-styles .imm-t:hover,.custom-styles .imm-d:hover{filter:brightness(1.15)}
-.custom-styles .imm-t input,.custom-styles .imm-d input{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
+.custom-styles .imm-t:hover,.custom-styles .imm-d:hover,.custom-styles .imm-m:hover{filter:brightness(1.15)}
+.custom-styles .imm-t input,.custom-styles .imm-d input,.custom-styles .imm-m input{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
+/* 切换: 视觉小说(立绘+对话框) <-> 直接出文(头像+气泡) */
+.custom-styles .imm-m{background:#c9a8ff}
+.custom-styles .imm-m span::before{content:"⇄ 直接出文"}
+.custom-styles .imm-m:has(input:checked){background:#7dffb0}
+.custom-styles .imm-m:has(input:checked) span::before{content:"⇄ 视觉小说"}
 .custom-styles .imm-t span::before{content:"⛶ 沉浸式体验"}
 .custom-styles .hb:has(.imm-t input:checked) .imm-t span::before{content:"✕ 退出沉浸"}
 .custom-styles .imm-t:has(input:checked){background:var(--vn-org)}
@@ -1407,4 +1417,124 @@
 .custom-styles .rili-markdown-renderer:has(.imm-t input:checked):has(.imm-d input:checked) > .dk .dk-body{display:block;position:static;margin:0;height:100%;max-height:100%;overflow-y:auto;
   box-shadow:0 10px 40px rgba(0,0,0,.7)}
 
+/* ---------- 矮屏 / 手机横屏: 沉浸层盖住输入栏, 顶栏压成一行, 卡片与对话框压缩 ---------- */
+@media (max-height:620px){
+  .custom-styles .hb:has(.imm-t input:checked){--imm-b:0px;inset:0;z-index:60}
+  .custom-styles .hb:has(.imm-t input:checked) .hb-top{flex-wrap:nowrap;gap:8px;padding:4px 10px 4px 0;overflow:hidden}
+  .custom-styles .hb:has(.imm-t input:checked) :is(.hb-chips,.hb-live,.hb-ship em){display:none}
+  .custom-styles .hb:has(.imm-t input:checked) .hb-ship{padding:2px 22px 2px 12px}
+  .custom-styles .hb:has(.imm-t input:checked) .hb-ship b{font-size:14px;letter-spacing:.14em}
+  .custom-styles .hb:has(.imm-t input:checked) :is(.imm-t,.imm-d,.imm-m){padding:4px 12px 4px 10px;font-size:11px;letter-spacing:.1em}
+  .custom-styles .hb:has(.imm-t input:checked) .hb-art{inset:4px 0 30px 0}
+  .custom-styles .hb:has(.imm-t input:checked) .hb-menu{gap:8px;padding:8px 12px 8px 4px;overflow-y:auto;justify-content:flex-start}
+  .custom-styles .hb:has(.imm-t input:checked) .hb-card:not([open]) summary,.custom-styles .hb:has(.imm-t input:checked) .hb-card .sm{padding:7px 16px}
+  .custom-styles .hb:has(.imm-t input:checked) .hb-card summary b,.custom-styles .hb:has(.imm-t input:checked) .hb-card .sm b{font-size:16px;margin:0}
+  .custom-styles .hb:has(.imm-t input:checked) .hb-card summary em,.custom-styles .hb:has(.imm-t input:checked) .hb-card .sm em{display:none}
+  .custom-styles .hb:has(.imm-t input:checked) .hb-card[open]>summary,.custom-styles .hb:has(.imm-t input:checked) .hb-card.story:has(.sm input:checked)>.sm{top:8px;right:10px}
+  .custom-styles .hb:has(.imm-t input:checked) .sl-say .box{min-height:0;padding:28px 22px 12px;bottom:3%}
+  .custom-styles .hb:has(.imm-t input:checked) .sl-say .text{font-size:16px;line-height:1.7}
+  .custom-styles .hb:has(.imm-t input:checked) .sl-say .name{font-size:14px;top:-14px;padding:3px 24px 3px 16px;left:22px}
+  .custom-styles .hb:has(.imm-t input:checked) .sl-say .art{top:12px}
+  .custom-styles .hb:has(.imm-t input:checked) .sl-nar p{font-size:16px;line-height:1.8}
+  .custom-styles .hb:has(.imm-t input:checked) .vn-scene b{font-size:22px}
+  .custom-styles .hb:has(.imm-t input:checked) .sl-bt .vn-bt b{font-size:34px}
+  .custom-styles .hb:has(.imm-t input:checked) .sl-dmg .vn-dmg b{font-size:48px}
+  .custom-styles .rili-markdown-renderer:has(.imm-t input:checked):has(.imm-d input:checked) > .dk{top:46px;bottom:8px;z-index:65}
+}
+
+/* ---------- 剧情回放: 勾「回放剧情」后每页按时间自动播放, 不需要点击; 「倍速」缩短每页停留 ---------- */
+.custom-styles .stg .rp,.custom-styles .stg .rs{position:absolute;right:16px;z-index:50;display:inline-flex;align-items:center;cursor:pointer;user-select:none;padding:5px 18px 5px 14px;
+  font:800 12px var(--vn-cond);letter-spacing:.14em;color:#071017;background:var(--vn-cyan);clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);white-space:nowrap}
+.custom-styles .stg .rp{top:56px}.custom-styles .stg .rs{top:90px;background:#ffd23f}
+.custom-styles .stg .rp input,.custom-styles .stg .rs input{display:none}
+.custom-styles .stg .rp span::before{content:"▶ 回放剧情"}
+.custom-styles .stg .rp:has(input:checked){background:var(--vn-org)}
+.custom-styles .stg .rp:has(input:checked) span::before{content:"■ 停止回放"}
+.custom-styles .stg .rs span::before{content:"⏩ 倍速"}
+.custom-styles .stg .rs:has(input:checked){background:#7dffb0}
+.custom-styles .stg .rs:has(input:checked) span::before{content:"⏩ 倍速 ON"}
+.custom-styles .stg:has(.rs input:checked){--rt:2.2s}
+.custom-styles .stg:has(.rp input:checked) .sl{display:block;animation:rpS var(--rt,4.6s) linear both;animation-delay:calc((var(--k,1) - 1) * var(--rt,4.6s))}
+.custom-styles .stg:has(.rp input:checked) .sl.end{animation-name:rpE}
+.custom-styles .stg:has(.rp input:checked) .sl .hit{pointer-events:none}
+.custom-styles .stg:has(.rp input:checked) .sl .nx{display:none}
+@keyframes rpS{0%{display:none;opacity:0}.01%{display:block;opacity:0}7%{opacity:1}93%{display:block;opacity:1}99.99%{display:block;opacity:0}100%{display:none;opacity:0}}
+@keyframes rpE{0%{display:none;opacity:0}.01%{display:block;opacity:0}8%{display:block;opacity:1}100%{display:block;opacity:1}}
+
+/* ---------- 直接出文(有头像): 隐藏立绘与舞台, 剧情按旁白段落 + 头像气泡平铺在页面里 ---------- */
+.custom-styles .hb:has(.imm-m input:checked) .hb-stage{display:none}
+.custom-styles .hb:has(.imm-m input:checked) .hb-main{display:block;min-height:0;
+  background:linear-gradient(rgba(7,10,14,.9),rgba(7,10,14,.95)),var(--bg) center/cover}
+.custom-styles .hb:has(.imm-m input:checked) .hb-main:has(.hb-card.map[open]){min-height:560px}
+.custom-styles .hb:has(.imm-m input:checked) .hb-menu{max-width:1040px;margin:0 auto;padding:14px 18px 24px;gap:12px}
+.custom-styles .hb:has(.imm-m input:checked) .hb-card{--ml:0px!important;margin-left:0}
+.custom-styles .hb:has(.imm-m input:checked) .hb-card.story{background:none;border:0}
+.custom-styles .hb:has(.imm-m input:checked) .hb-card.story>.sm{position:static;display:flex;padding:4px 4px 12px;cursor:default;pointer-events:none;border-bottom:1px dashed rgba(255,255,255,.18);margin-bottom:12px}
+.custom-styles .hb:has(.imm-m input:checked) .hb-card.story>.sm>div{display:block}
+.custom-styles .hb:has(.imm-m input:checked) .hb-card.story>.sm>i{display:none}
+.custom-styles .hb:has(.imm-m input:checked) .hb-card.story>.sm b{font-size:20px;margin:0}
+.custom-styles .hb:has(.imm-m input:checked) .hb-card.story .stg{display:block!important;position:static;inset:auto;animation:none;background:none;overflow:visible;padding:0}
+.custom-styles .hb:has(.imm-m input:checked) .hb-card.story .stg::before,
+.custom-styles .hb:has(.imm-m input:checked) .hb-card.story .stg::after,
+.custom-styles .hb:has(.imm-m input:checked) .hb-card.story .stg .v0,
+.custom-styles .hb:has(.imm-m input:checked) .hb-card.story .stg :is(.rp,.rs,.hit,.nx){display:none}
+.custom-styles .hb:has(.imm-m input:checked) .hb-card.story .stg .sl{display:block!important;position:static;inset:auto;overflow:visible;animation:none;opacity:1;margin:0 0 12px;background:none}
+/* 旁白 */
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-nar p{position:static;transform:none;text-align:left;font-size:16.5px;line-height:2;letter-spacing:.04em;padding:0 4px;color:#dfe8ee;text-shadow:none}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-nar p::before{display:none}
+/* 场景标题 */
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-scene .vn-scene{position:static;transform:none;padding:12px 10px;gap:2px}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-scene .vn-scene b{font-size:20px;letter-spacing:.3em;animation:none}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-scene .vn-scene :is(s,i){display:none}
+/* 对话: 圆形头像 + 彩色圆角气泡, 右侧说话人反向 */
+.custom-styles .hb:has(.imm-m input:checked) .hb-card.story .stg .sl.sl-say{display:flex!important;align-items:flex-start;gap:12px}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-say.s-右{flex-direction:row-reverse}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-say .art{position:static;flex:none;width:52px;height:52px;border-radius:50%;border:2px solid var(--c);z-index:auto;animation:none;filter:none;
+  -webkit-mask-image:none;mask-image:none;background-color:#18222b;background-size:cover;background-position:50% 10%;background-repeat:no-repeat;
+  background-image:var(--i,radial-gradient(circle at 50% 36%,#9fb0bb 0 21%,transparent 22%),radial-gradient(ellipse at 50% 108%,#9fb0bb 0 46%,transparent 47%))}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-say .art::before{display:none}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-say .box{position:static;flex:1;min-width:0;min-height:0;padding:9px 16px 11px;border:1px solid var(--c);border-radius:14px;
+  background:rgba(14,22,30,.92);background:color-mix(in srgb,var(--c) 11%,#0b1117);box-shadow:none;animation:none;filter:none}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-say .box::after{display:none}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-say .name{position:static;display:block;padding:0;margin-bottom:3px;background:none;color:var(--c);clip-path:none;box-shadow:none;font-size:14px;letter-spacing:.06em;font-weight:800}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-say .name::after{color:#9fb2bf;font-weight:600}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-say.e-怒 .name::after{content:" · 怒"}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-say.e-喊 .name::after{content:" · 喊"}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-say.e-惊 .name::after{content:" · 惊"}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-say.e-悲 .name::after{content:" · 悲"}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-say.e-笑 .name::after{content:" · 笑"}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-say.e-冷 .name::after{content:" · 冷"}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-say.e-低语 .name::after{content:" · 低语"}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-say .text{font-size:16px;line-height:1.85;letter-spacing:.03em;animation:none;text-shadow:none}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-say.e-喊 .text{font-size:17.5px}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-say.e-低语 .text{font-size:15px}
+/* 内心 / 系统 */
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-think .tk{position:static;transform:none;margin-left:64px;padding:6px 14px;border-left-width:3px}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-think .tk span{font-size:15.5px;line-height:1.8}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-sys .sy{position:static;transform:none;display:block;width:fit-content;max-width:100%;margin:0 auto;padding:5px 22px;font-size:14px;white-space:normal;text-align:center;clip-path:none}
+/* 战斗 / 特效 / 伤害 / 敌人: 压成紧凑的一行卡 */
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-bt .vn-bt{position:static;height:auto;margin:0;padding:14px 10px}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-bt .vn-bt b{font-size:26px}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-fx .vn-fx{position:relative;height:104px;margin:0}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-fx .vn-fx .cap{padding:20px 16px 8px;font-size:15px}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-dmg{background:none}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-dmg .vn-dmg{position:static;transform:none;margin:0;max-width:100%;padding:4px 20px 4px 14px;gap:14px}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-dmg .vn-dmg b{font-size:30px}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-dmg .vn-dmg span{font-size:14px}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl-en .vn-en{position:static;transform:none;width:100%}
+/* 结束页: 一条细分隔 */
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl.end{padding:6px 0;margin:6px 0 0;border-top:1px dashed rgba(255,255,255,.2)}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl.end .ed{position:static;transform:none}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl.end .ed b{font-size:14px;letter-spacing:.4em;color:#8fa6b3}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl.end .ed em{display:none}
+/* 沉浸 + 直接出文: 面板内部滚动 */
+.custom-styles .hb:has(.imm-t input:checked):has(.imm-m input:checked) .hb-main{overflow-y:auto}
+@media (max-width:760px){
+  .custom-styles .hb:has(.imm-m input:checked) .hb-menu{padding:10px 10px 20px}
+  .custom-styles .hb:has(.imm-m input:checked) .stg .sl-say .art{width:42px;height:42px}
+  .custom-styles .hb:has(.imm-m input:checked) .stg .sl-think .tk{margin-left:54px}
+}
+
 .custom-styles .mp .mv{--mimg:url(https://assets.kotodamai.com/i/rmreDmCmXCDfZxwSAA4h0pAdR1Z6IdHv/image.png)}
+/* 回放: 页序号 */
+.custom-styles .stg>.sl:nth-child(1 of .sl){--k:1}.custom-styles .stg>.sl:nth-child(2 of .sl){--k:2}.custom-styles .stg>.sl:nth-child(3 of .sl){--k:3}.custom-styles .stg>.sl:nth-child(4 of .sl){--k:4}.custom-styles .stg>.sl:nth-child(5 of .sl){--k:5}.custom-styles .stg>.sl:nth-child(6 of .sl){--k:6}.custom-styles .stg>.sl:nth-child(7 of .sl){--k:7}.custom-styles .stg>.sl:nth-child(8 of .sl){--k:8}.custom-styles .stg>.sl:nth-child(9 of .sl){--k:9}.custom-styles .stg>.sl:nth-child(10 of .sl){--k:10}.custom-styles .stg>.sl:nth-child(11 of .sl){--k:11}.custom-styles .stg>.sl:nth-child(12 of .sl){--k:12}.custom-styles .stg>.sl:nth-child(13 of .sl){--k:13}.custom-styles .stg>.sl:nth-child(14 of .sl){--k:14}.custom-styles .stg>.sl:nth-child(15 of .sl){--k:15}.custom-styles .stg>.sl:nth-child(16 of .sl){--k:16}.custom-styles .stg>.sl:nth-child(17 of .sl){--k:17}.custom-styles .stg>.sl:nth-child(18 of .sl){--k:18}.custom-styles .stg>.sl:nth-child(19 of .sl){--k:19}.custom-styles .stg>.sl:nth-child(20 of .sl){--k:20}.custom-styles .stg>.sl:nth-child(21 of .sl){--k:21}.custom-styles .stg>.sl:nth-child(22 of .sl){--k:22}.custom-styles .stg>.sl:nth-child(23 of .sl){--k:23}.custom-styles .stg>.sl:nth-child(24 of .sl){--k:24}.custom-styles .stg>.sl:nth-child(25 of .sl){--k:25}.custom-styles .stg>.sl:nth-child(26 of .sl){--k:26}.custom-styles .stg>.sl:nth-child(27 of .sl){--k:27}.custom-styles .stg>.sl:nth-child(28 of .sl){--k:28}.custom-styles .stg>.sl:nth-child(29 of .sl){--k:29}.custom-styles .stg>.sl:nth-child(30 of .sl){--k:30}.custom-styles .stg>.sl:nth-child(31 of .sl){--k:31}.custom-styles .stg>.sl:nth-child(32 of .sl){--k:32}.custom-styles .stg>.sl:nth-child(33 of .sl){--k:33}.custom-styles .stg>.sl:nth-child(34 of .sl){--k:34}.custom-styles .stg>.sl:nth-child(35 of .sl){--k:35}.custom-styles .stg>.sl:nth-child(36 of .sl){--k:36}.custom-styles .stg>.sl:nth-child(37 of .sl){--k:37}.custom-styles .stg>.sl:nth-child(38 of .sl){--k:38}.custom-styles .stg>.sl:nth-child(39 of .sl){--k:39}.custom-styles .stg>.sl:nth-child(40 of .sl){--k:40}.custom-styles .stg>.sl:nth-child(41 of .sl){--k:41}.custom-styles .stg>.sl:nth-child(42 of .sl){--k:42}.custom-styles .stg>.sl:nth-child(43 of .sl){--k:43}.custom-styles .stg>.sl:nth-child(44 of .sl){--k:44}.custom-styles .stg>.sl:nth-child(45 of .sl){--k:45}.custom-styles .stg>.sl:nth-child(46 of .sl){--k:46}.custom-styles .stg>.sl:nth-child(47 of .sl){--k:47}.custom-styles .stg>.sl:nth-child(48 of .sl){--k:48}.custom-styles .stg>.sl:nth-child(49 of .sl){--k:49}.custom-styles .stg>.sl:nth-child(50 of .sl){--k:50}.custom-styles .stg>.sl:nth-child(51 of .sl){--k:51}.custom-styles .stg>.sl:nth-child(52 of .sl){--k:52}.custom-styles .stg>.sl:nth-child(53 of .sl){--k:53}.custom-styles .stg>.sl:nth-child(54 of .sl){--k:54}.custom-styles .stg>.sl:nth-child(55 of .sl){--k:55}.custom-styles .stg>.sl:nth-child(56 of .sl){--k:56}.custom-styles .stg>.sl:nth-child(57 of .sl){--k:57}.custom-styles .stg>.sl:nth-child(58 of .sl){--k:58}.custom-styles .stg>.sl:nth-child(59 of .sl){--k:59}.custom-styles .stg>.sl:nth-child(60 of .sl){--k:60}.custom-styles .stg>.sl:nth-child(61 of .sl){--k:61}.custom-styles .stg>.sl:nth-child(62 of .sl){--k:62}.custom-styles .stg>.sl:nth-child(63 of .sl){--k:63}.custom-styles .stg>.sl:nth-child(64 of .sl){--k:64}.custom-styles .stg>.sl:nth-child(65 of .sl){--k:65}.custom-styles .stg>.sl:nth-child(66 of .sl){--k:66}.custom-styles .stg>.sl:nth-child(67 of .sl){--k:67}.custom-styles .stg>.sl:nth-child(68 of .sl){--k:68}.custom-styles .stg>.sl:nth-child(69 of .sl){--k:69}.custom-styles .stg>.sl:nth-child(70 of .sl){--k:70}.custom-styles .stg>.sl:nth-child(71 of .sl){--k:71}.custom-styles .stg>.sl:nth-child(72 of .sl){--k:72}.custom-styles .stg>.sl:nth-child(73 of .sl){--k:73}.custom-styles .stg>.sl:nth-child(74 of .sl){--k:74}.custom-styles .stg>.sl:nth-child(75 of .sl){--k:75}.custom-styles .stg>.sl:nth-child(76 of .sl){--k:76}.custom-styles .stg>.sl:nth-child(77 of .sl){--k:77}.custom-styles .stg>.sl:nth-child(78 of .sl){--k:78}.custom-styles .stg>.sl:nth-child(79 of .sl){--k:79}.custom-styles .stg>.sl:nth-child(80 of .sl){--k:80}.custom-styles .stg>.sl:nth-child(81 of .sl){--k:81}.custom-styles .stg>.sl:nth-child(82 of .sl){--k:82}.custom-styles .stg>.sl:nth-child(83 of .sl){--k:83}.custom-styles .stg>.sl:nth-child(84 of .sl){--k:84}.custom-styles .stg>.sl:nth-child(85 of .sl){--k:85}.custom-styles .stg>.sl:nth-child(86 of .sl){--k:86}.custom-styles .stg>.sl:nth-child(87 of .sl){--k:87}.custom-styles .stg>.sl:nth-child(88 of .sl){--k:88}.custom-styles .stg>.sl:nth-child(89 of .sl){--k:89}.custom-styles .stg>.sl:nth-child(90 of .sl){--k:90}.custom-styles .stg>.sl:nth-child(91 of .sl){--k:91}.custom-styles .stg>.sl:nth-child(92 of .sl){--k:92}.custom-styles .stg>.sl:nth-child(93 of .sl){--k:93}.custom-styles .stg>.sl:nth-child(94 of .sl){--k:94}.custom-styles .stg>.sl:nth-child(95 of .sl){--k:95}.custom-styles .stg>.sl:nth-child(96 of .sl){--k:96}.custom-styles .stg>.sl:nth-child(97 of .sl){--k:97}.custom-styles .stg>.sl:nth-child(98 of .sl){--k:98}.custom-styles .stg>.sl:nth-child(99 of .sl){--k:99}.custom-styles .stg>.sl:nth-child(100 of .sl){--k:100}.custom-styles .stg>.sl:nth-child(101 of .sl){--k:101}.custom-styles .stg>.sl:nth-child(102 of .sl){--k:102}.custom-styles .stg>.sl:nth-child(103 of .sl){--k:103}.custom-styles .stg>.sl:nth-child(104 of .sl){--k:104}.custom-styles .stg>.sl:nth-child(105 of .sl){--k:105}.custom-styles .stg>.sl:nth-child(106 of .sl){--k:106}.custom-styles .stg>.sl:nth-child(107 of .sl){--k:107}.custom-styles .stg>.sl:nth-child(108 of .sl){--k:108}.custom-styles .stg>.sl:nth-child(109 of .sl){--k:109}.custom-styles .stg>.sl:nth-child(110 of .sl){--k:110}.custom-styles .stg>.sl:nth-child(111 of .sl){--k:111}.custom-styles .stg>.sl:nth-child(112 of .sl){--k:112}.custom-styles .stg>.sl:nth-child(113 of .sl){--k:113}.custom-styles .stg>.sl:nth-child(114 of .sl){--k:114}.custom-styles .stg>.sl:nth-child(115 of .sl){--k:115}.custom-styles .stg>.sl:nth-child(116 of .sl){--k:116}.custom-styles .stg>.sl:nth-child(117 of .sl){--k:117}.custom-styles .stg>.sl:nth-child(118 of .sl){--k:118}.custom-styles .stg>.sl:nth-child(119 of .sl){--k:119}.custom-styles .stg>.sl:nth-child(120 of .sl){--k:120}.custom-styles .stg>.sl:nth-child(121 of .sl){--k:121}.custom-styles .stg>.sl:nth-child(122 of .sl){--k:122}.custom-styles .stg>.sl:nth-child(123 of .sl){--k:123}.custom-styles .stg>.sl:nth-child(124 of .sl){--k:124}.custom-styles .stg>.sl:nth-child(125 of .sl){--k:125}.custom-styles .stg>.sl:nth-child(126 of .sl){--k:126}.custom-styles .stg>.sl:nth-child(127 of .sl){--k:127}.custom-styles .stg>.sl:nth-child(128 of .sl){--k:128}.custom-styles .stg>.sl:nth-child(129 of .sl){--k:129}.custom-styles .stg>.sl:nth-child(130 of .sl){--k:130}.custom-styles .stg>.sl:nth-child(131 of .sl){--k:131}.custom-styles .stg>.sl:nth-child(132 of .sl){--k:132}.custom-styles .stg>.sl:nth-child(133 of .sl){--k:133}.custom-styles .stg>.sl:nth-child(134 of .sl){--k:134}.custom-styles .stg>.sl:nth-child(135 of .sl){--k:135}.custom-styles .stg>.sl:nth-child(136 of .sl){--k:136}.custom-styles .stg>.sl:nth-child(137 of .sl){--k:137}.custom-styles .stg>.sl:nth-child(138 of .sl){--k:138}.custom-styles .stg>.sl:nth-child(139 of .sl){--k:139}.custom-styles .stg>.sl:nth-child(140 of .sl){--k:140}.custom-styles .stg>.sl:nth-child(141 of .sl){--k:141}.custom-styles .stg>.sl:nth-child(142 of .sl){--k:142}.custom-styles .stg>.sl:nth-child(143 of .sl){--k:143}.custom-styles .stg>.sl:nth-child(144 of .sl){--k:144}.custom-styles .stg>.sl:nth-child(145 of .sl){--k:145}.custom-styles .stg>.sl:nth-child(146 of .sl){--k:146}.custom-styles .stg>.sl:nth-child(147 of .sl){--k:147}.custom-styles .stg>.sl:nth-child(148 of .sl){--k:148}.custom-styles .stg>.sl:nth-child(149 of .sl){--k:149}.custom-styles .stg>.sl:nth-child(150 of .sl){--k:150}.custom-styles .stg>.sl:nth-child(151 of .sl){--k:151}.custom-styles .stg>.sl:nth-child(152 of .sl){--k:152}.custom-styles .stg>.sl:nth-child(153 of .sl){--k:153}.custom-styles .stg>.sl:nth-child(154 of .sl){--k:154}.custom-styles .stg>.sl:nth-child(155 of .sl){--k:155}.custom-styles .stg>.sl:nth-child(156 of .sl){--k:156}.custom-styles .stg>.sl:nth-child(157 of .sl){--k:157}.custom-styles .stg>.sl:nth-child(158 of .sl){--k:158}.custom-styles .stg>.sl:nth-child(159 of .sl){--k:159}.custom-styles .stg>.sl:nth-child(160 of .sl){--k:160}
