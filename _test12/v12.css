@@ -1620,12 +1620,6 @@
   .custom-styles .rili-markdown-renderer:has(.vn-slot>.vn-tools .imm-t input:checked):has(.vn-slot>.vn-tools .imm-d input:checked) .dk{top:8px;bottom:62px;z-index:1001}
 }
 
-
-/* =====================================================================
-   第12版: ① 记忆表格(短期/长期)  ② NPC / 主角档案卡  ③ 大招过场(明日方舟 CSS 演出 + 鸣潮真实视频)
-   ===================================================================== */
-
-/* ---------- ① 记忆表格: 序号用 CSS counter, 表头/页脚随条目出现 ---------- */
 .custom-styles .xm-all{counter-reset:ms ml}
 .custom-styles .xm-all > .k-st{counter-increment:ms}
 .custom-styles .xm-all > .k-lt{counter-increment:ml}
@@ -1651,21 +1645,21 @@
 .custom-styles .h-pal:has(input:checked)~:is(.th,.tf){display:none!important}
 
 /* ---------- ② NPC / 主角档案卡: 左立绘 + 右侧职业·星级·势力 / 出身 / 履历 ---------- */
-.custom-styles .xm-all > :is(.k-npc,.k-hp){position:relative;display:grid;grid-template-columns:76px minmax(0,1fr);align-content:start;column-gap:11px;row-gap:3px;min-height:0;margin:8px 12px 0;padding:10px;
+.custom-styles .xm-all > .xm-i:is(.k-npc,.k-hp){position:relative;display:grid;grid-template-columns:76px minmax(0,1fr);align-content:start;column-gap:11px;row-gap:3px;min-height:0;margin:8px 12px 0;padding:10px;
   border:1px solid rgba(24,209,255,.3);border-left:3px solid var(--vn-cyan);background:linear-gradient(100deg,rgba(24,209,255,.1),rgba(255,255,255,.02) 70%)}
-.custom-styles .xm-all > .k-hp{order:609;border-color:rgba(255,122,46,.42);border-left-color:var(--vn-org);background:linear-gradient(100deg,rgba(255,122,46,.13),rgba(255,255,255,.02) 70%)}
-.custom-styles .xm-all > :is(.k-npc,.k-hp) > i{position:relative;left:auto;top:auto;grid-column:1;grid-row:1 / span 3;width:76px;height:112px;border:1px solid rgba(255,255,255,.3);border-radius:0;animation:none;
+.custom-styles .xm-all > .xm-i.k-hp{order:609;border-color:rgba(255,122,46,.42);border-left-color:var(--vn-org);background:linear-gradient(100deg,rgba(255,122,46,.13),rgba(255,255,255,.02) 70%)}
+.custom-styles .xm-all > .xm-i:is(.k-npc,.k-hp) > i{position:relative;left:auto;top:auto;grid-column:1;grid-row:1 / span 3;width:76px;height:112px;border:1px solid rgba(255,255,255,.3);border-radius:0;animation:none;
   clip-path:polygon(0 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%);background-color:#141d26;
   background-image:var(--i,radial-gradient(circle at 50% 34%,#6f8392 0 20%,transparent 21%),radial-gradient(ellipse at 50% 108%,#6f8392 0 46%,transparent 47%));
   background-size:cover;background-position:50% 6%;background-repeat:no-repeat}
-.custom-styles .xm-all > :is(.k-npc,.k-hp) > b{grid-column:2;grid-row:1;align-self:end;font-size:15px;font-weight:800;letter-spacing:.1em;color:#fff}
-.custom-styles .xm-all > :is(.k-npc,.k-hp) > b::after{content:var(--pa);display:block;margin-top:2px;font:600 11px/1.5 var(--vn-cond);letter-spacing:.06em;color:var(--vn-cyan)}
-.custom-styles .xm-all > .k-hp > b{color:#ffd9bd}.custom-styles .xm-all > .k-hp > b::after{color:var(--vn-org)}
-.custom-styles .xm-all > :is(.k-npc,.k-hp) > span{grid-column:2;grid-row:2;font-size:12.5px;line-height:1.7;color:#e3edf3}
-.custom-styles .xm-all > .k-npc > span::before{content:"本幕 · ";color:var(--vn-yel);font-weight:700}
-.custom-styles .xm-all > .k-hp > span::before{content:"状态 · ";color:var(--vn-org);font-weight:700}
-.custom-styles .xm-all > :is(.k-npc,.k-hp)::before{content:var(--pb);grid-column:2;grid-row:3;align-self:start;font-size:11px;line-height:1.6;color:#8fa6b3}
-.custom-styles .xm-all > :is(.k-npc,.k-hp)::after{content:"档案 · " var(--pc);grid-column:1 / -1;grid-row:4;margin-top:4px;padding-top:6px;border-top:1px dashed rgba(255,255,255,.18);font-size:11.5px;line-height:1.75;color:#b9c9d4}
+.custom-styles .xm-all > .xm-i:is(.k-npc,.k-hp) > b{grid-column:2;grid-row:1;align-self:end;font-size:15px;font-weight:800;letter-spacing:.1em;color:#fff}
+.custom-styles .xm-all > .xm-i:is(.k-npc,.k-hp) > b::after{content:var(--pa);display:block;margin-top:2px;font:600 11px/1.5 var(--vn-cond);letter-spacing:.06em;color:var(--vn-cyan)}
+.custom-styles .xm-all > .xm-i.k-hp > b{color:#ffd9bd}.custom-styles .xm-all > .xm-i.k-hp > b::after{color:var(--vn-org)}
+.custom-styles .xm-all > .xm-i:is(.k-npc,.k-hp) > span{grid-column:2;grid-row:2;font-size:12.5px;line-height:1.7;color:#e3edf3}
+.custom-styles .xm-all > .xm-i.k-npc > span::before{content:"本幕 · ";color:var(--vn-yel);font-weight:700}
+.custom-styles .xm-all > .xm-i.k-hp > span::before{content:"状态 · ";color:var(--vn-org);font-weight:700}
+.custom-styles .xm-all > .xm-i:is(.k-npc,.k-hp)::before{content:var(--pb);grid-column:2;grid-row:3;align-self:start;font-size:11px;line-height:1.6;color:#8fa6b3}
+.custom-styles .xm-all > .xm-i:is(.k-npc,.k-hp)::after{content:"档案 · " var(--pc);grid-column:1 / -1;grid-row:4;margin-top:4px;padding-top:6px;border-top:1px dashed rgba(255,255,255,.18);font-size:11.5px;line-height:1.75;color:#b9c9d4}
 
 /* ---------- ③ 大招过场 ---------- */
 @keyframes ulFlash{0%{opacity:0}8%{opacity:.95}100%{opacity:0}}
@@ -1742,6 +1736,7 @@
 .custom-styles .vn-slot:has(>.vn-tools .imm-m input:checked) > .hb .stg .sl-ult .vn-uv .b{display:none}
 .custom-styles .vn-slot:has(>.vn-tools .imm-m input:checked) > .hb .stg .sl-ult .vn-uv .cap{padding-left:14px}
 @media (prefers-reduced-motion:reduce){.custom-styles .vn-ult,.custom-styles .vn-ult *,.custom-styles .vn-ult::before,.custom-styles .vn-ult .d::before,.custom-styles .vn-ult .d::after{animation-duration:.01s!important;animation-iteration-count:1!important}}
+
 
 /* ===== 第12版 · 自动生成: 大招变量 / NPC 档案变量 ===== */
 .custom-styles .u-左乐{--sk:"佑序有炎";--sl:"S3";--ic:url(https://hykhxy.github.io/ak-home/assets/ult/ai/char_4121_zuole.webp);}
