@@ -6,7 +6,7 @@
 const AK = window.AK, C = window.CHAR, $ = s => document.querySelector(s), esc = AK.esc, st = AK.st, cfg = C.cfg;
 const ATTR = C.attrs, AKEYS = ATTR.map(a => a.k), DOC = C.doctor;
 const clone = o => JSON.parse(JSON.stringify(o));
-const blank = () => ({ name: '', code: '', gender: '不公开', gcustom: '', race: 'human', inf: 'none', origin: '罗德岛', tags: [], persona: '', build: 'avg', height: 170,
+const blank = () => ({ name: '', code: '', gender: '不公开', gcustom: '', race: 'human', inf: 'none', origin: '罗德岛', timeline: '', tags: [], persona: '', build: 'avg', height: 170,
   look: '', coat: '', top: '', bottom: '', avatar: '', talents: [], alloc: Object.fromEntries(AKEYS.map(k => [k, 0])) });
 const fill = o => { const b = blank(); const r = Object.assign(b, o || {}); r.alloc = Object.assign(b.alloc, (o && o.alloc) || {}); r.tags = (r.tags || []).slice(0, cfg.tagMax); r.talents = (r.talents || []).filter(id => C.talents.some(t => t.id === id)).slice(0, cfg.talentMax); return r; };
 
@@ -20,6 +20,7 @@ const inf = id => C.infs.find(r => r.id === id) || C.infs[0];
 const tal = id => C.talents.find(t => t.id === id);
 const build = id => C.builds.find(b => b[0] === id) || C.builds[1];
 const genderOf = p => p.gender === '自定义' ? (p.gcustom.trim() || '自定义') : p.gender;
+const tlOf = id => C.timeline.find(t => t[0] === id) || C.timeline[0];
 
 /* ---------- 头像 ---------- */
 const hue = s => { let h = 0; for (const c of s) h = (h * 31 + c.charCodeAt(0)) % 360; return h; };
@@ -126,7 +127,7 @@ function pickHtml() {
     <div class="ch-pc cus" data-ch="mode" data-m="custom">${cur('custom')}
       <img src="${S.mode === 'custom' && S.custom ? avaOf('custom', S.custom) : mkAva('新')}" alt=""><div><small>ROLE · CUSTOM</small><b>原创角色</b>
       <p>写下属于你自己的故事:姓名、性别、性格、样貌与衣着,上传或链接头像,挑选天赋并分配属性。</p>
-      <p class="d">填写完成后点「保存角色」即可写入存档,下次进入自动载入。</p><span class="go">选择 ▸</span></div></div>
+      <p class="d">填写完成后点「保存角色」:存档的同时,全部设定会复制到剪贴板,去聊天输入框粘贴即可。</p><span class="go">选择 ▸</span></div></div>
   </div>
   <div class="ch-tip">没有对错之分——你选择的身份会显示在大厅的玩家名牌上,其属性中的「全队战力加成」会作用于编队战力。</div>`;
 }
@@ -155,6 +156,7 @@ function customHtml() {
         ${fld('种族', `<div class="ch-chips">${chips(C.races.map(r => [r.id, r.n, r.d]), p.race, 'race')}</div>`, 'w2')}
         ${fld('矿石病感染', `<div class="ch-chips">${chips(C.infs.map(r => [r.id, r.n, r.d]), p.inf, 'inf')}</div>`, 'w2')}
         ${fld('出身 / 所属', `<select class="ch-in ch-sel" data-f="origin">${C.origins.map(o => `<option${o === p.origin ? ' selected' : ''}>${esc(o)}</option>`).join('')}</select>`)}
+        ${fld('时间线(从最初到最后)', `<select class="ch-in ch-sel" data-f="timeline">${C.timeline.map(([v, n]) => `<option value="${esc(v)}"${v === (p.timeline || '') ? ' selected' : ''}>${esc(n)}</option>`).join('')}</select>`)}
       </div></div>`;
   const persona = `<div class="ch-f"><small>性格特点(可多选,最多 ${cfg.tagMax} 个) <b>${p.tags.length}/${cfg.tagMax}</b></small>
       <div class="ch-chips">${C.tagList.map(t => `<button class="ch-chip${p.tags.includes(t) ? ' on' : ''}" data-ch="tag" data-v="${esc(t)}">${esc(t)}</button>`).join('')}</div></div>
@@ -216,8 +218,8 @@ function identSide() {
   set('#chsMode', step === 'pick' ? (v.mode ? '已保存身份' : '尚未创建') : doc ? '扮演原著博士' : '原创角色');
   set('#chsName', !v.mode ? '— —' : doc ? 'Doctor' : (P.name.trim() || '未命名'));
   set('#chsSub', !v.mode ? '请在左侧选择身份' : doc ? '博士 · DOCTOR · 权限等级 8' : (P.code.trim() || '— 暂无代号 —'));
-  $('#chsTags').innerHTML = (!v.mode ? [] : doc ? ['罗德岛高层', '战术指挥', '性别未公开'] : [genderOf(P), race(P.race).n, inf(P.inf).n, P.origin, build(P.build)[1] + ' ' + P.height + 'cm']).map(t => `<span>${esc(t)}</span>`).join('');
-  set('#chsNote', doc ? '博士的属性与天赋为按公开设定改编的玩法数值,并非官方数据。' : '属性由「基础 5 + 分配 + 种族 + 感染 + 天赋」叠加而成,单项上限 ' + cfg.cap + '。');
+  $('#chsTags').innerHTML = (!v.mode ? [] : doc ? ['罗德岛高层', '战术指挥', '性别未公开'] : [genderOf(P), race(P.race).n, inf(P.inf).n, P.origin, build(P.build)[1] + ' ' + P.height + 'cm'].concat(P.timeline ? [tlOf(P.timeline)[1].split(' · ')[0]] : [])).map(t => `<span>${esc(t)}</span>`).join('');
+  set('#chsNote', doc ? '博士的属性与天赋为按公开设定改编的玩法数值,并非官方数据。' : '属性由「基础 5 + 分配 + 种族 + 感染 + 天赋」叠加而成,单项上限 ' + cfg.cap + '。点「保存角色」会同时把全部设定复制到剪贴板。');
   const b = $('#chSave2'); if (b) b.style.display = step === 'pick' ? 'none' : '';
 }
 let rv = null, lastD = null, raf = 0;
@@ -258,8 +260,8 @@ function updateHead() {
   const dirty = isDirty(), save = $('#chSave');
   $('#chSwitch').style.display = step === 'pick' ? 'none' : '';
   save.style.display = step === 'pick' ? 'none' : '';
-  save.textContent = step === 'doctor' ? (S.mode === 'doctor' ? '已在扮演博士' : '确认扮演博士') : '保存角色';
-  save.disabled = step === 'doctor' ? S.mode === 'doctor' : false;
+  save.textContent = step === 'doctor' ? (S.mode === 'doctor' ? '复制博士设定' : '确认扮演博士') : '保存角色';
+  save.disabled = false;
   const b2 = $('#chSave2'); if (b2) { b2.textContent = save.textContent; b2.disabled = save.disabled; }
   const dt = $('#chDirty'); dt.textContent = step === 'pick' ? '' : step === 'custom' ? (dirty ? '● 有未保存的修改' : S.mode === 'custom' ? '✓ 已保存' : '尚未保存') : (S.mode === 'doctor' ? '✓ 已保存' : '尚未保存');
   dt.className = 'ch-dirty' + (dirty ? ' dirty' : '');
@@ -277,8 +279,67 @@ function save() {
     const left = cfg.pool - used(); S.mode = 'custom'; S.custom = clone(p);
     if (left > 0) setTimeout(() => AK.toast(`提示:还有 ${left} 点属性未分配,可随时回来修改`), 900);
   }
-  S.draft = null; AK.save(); applyLobby(); updateHead(); identSide(); AK.toast(step === 'doctor' ? '已确认:你将扮演博士' : `角色「${S.custom.name}」已保存`); AK.emit('char');
+  S.draft = null; AK.save(); applyLobby(); updateHead(); identSide(); AK.emit('char');
   AK.beep && AK.beep(520, 880, .15, 'triangle', .05);
+  exportText(step === 'doctor' ? 'doctor' : 'custom', step === 'doctor' ? null : S.custom);
+}
+
+/* ---------- 保存 = 把全部设定整理成一段文字并复制 ---------- */
+function settingText(mode, p) {
+  const L = [];
+  if (mode === 'doctor') {
+    L.push('【玩家角色设定 · 扮演原著博士】', '(请按下列公开设定扮演我,不要擅自更改、增加或减少设定)');
+    DOC.profile.forEach(([k, v]) => L.push(`${k}:${v}`));
+    L.push(`性格:${DOC.persona}`, `外观:${DOC.look.map(([k, v]) => `${k}${v}`).join(';')}`, '经历:');
+    DOC.story.forEach(([k, v]) => L.push(`- ${k}:${v}`));
+    L.push(`天赋:${DOC.talents.map(t => `${t.n}(${t.d})`).join(';')}`);
+    L.push(`属性:${ATTR.map(x => `${x.n} ${DOC.stats[x.k]}`).join(' / ')}`, `备注:${DOC.note}`);
+    return L.join('\n');
+  }
+  const a = attrsOf('custom', p), d = derive(a, fxOf('custom', p), build(p.build)[2]), r = race(p.race), f = inf(p.inf), tl = tlOf(p.timeline || '');
+  L.push('【玩家角色设定】', '(请严格按下列设定扮演我,不要擅自更改、增加或减少设定)');
+  L.push(`姓名:${p.name}`);
+  if (p.code.trim()) L.push(`代号 / 称号:${p.code.trim()}`);
+  L.push(`性别:${genderOf(p)}`, `种族:${r.n}(${r.d})`, `矿石病感染:${f.n}(${f.d})`, `出身 / 所属:${p.origin}`);
+  if (tl[0]) L.push(`时间线:${tl[1]}(故事从这一时间点开始,请按此安排世界局势与人物关系,不要提前写出之后才发生的剧情)`);
+  else L.push('时间线:不限定,由剧情自然推进');
+  L.push(`性格特点:${p.tags.length ? p.tags.join('、') : '未选择'}`);
+  if (p.persona.trim()) L.push(`性格补充:${p.persona.trim()}`);
+  L.push(`身材:${build(p.build)[1]},身高 ${p.height}cm`);
+  if (p.look.trim()) L.push(`样貌:${p.look.trim()}`);
+  const cl = [['外套', p.coat], ['上衣', p.top], ['下衣', p.bottom]].filter(x => (x[1] || '').trim()).map(x => `${x[0]}:${x[1].trim()}`);
+  if (cl.length) L.push(`衣着:${cl.join(';')}`);
+  L.push(p.talents.length ? '天赋:' : '天赋:未选择');
+  p.talents.forEach(id => { const t = tal(id); if (t) L.push(`- ${t.n}(${t.tag}):${t.d}`); });
+  L.push(`属性(单项上限 ${cfg.cap}):${ATTR.map(x => `${x.n} ${a[x.k]}`).join(' / ')}`);
+  L.push(`战斗面板:${DER.map(([k, n, en, u]) => `${n} ${k === 'bonus' ? '+' : ''}${d[k]}${u}`).join(' / ')}`);
+  L.push(`综合评分:${d.score}(${grade(d.score)} 级)`);
+  return L.join('\n');
+}
+async function copyText(t) {
+  try { if (navigator.clipboard && window.isSecureContext) { await navigator.clipboard.writeText(t); return true; } } catch (e) { /* 被嵌套框架拦截时走下面的后备 */ }
+  const ta = document.createElement('textarea'); ta.value = t; ta.setAttribute('readonly', '');
+  ta.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0'; document.body.appendChild(ta); ta.select();
+  let ok = false; try { ok = document.execCommand('copy'); } catch (e) { ok = false; } ta.remove(); return ok;
+}
+async function exportText(mode, p) {
+  const txt = settingText(mode, p), ok = await copyText(txt);
+  AK.toast(ok ? '已保存,全部设定已复制,去聊天输入框粘贴即可' : '已保存;浏览器不让自动复制,请在弹窗里手动复制');
+  showCopy(txt, ok);
+}
+function showCopy(txt, ok) {
+  const old = $('#chCopy'); if (old) old.remove();
+  const box = document.createElement('div'); box.id = 'chCopy'; box.className = 'ch-copy';
+  box.innerHTML = `<div class="ch-cp"><h4>${ok ? '✓ 全部设定已复制到剪贴板' : '请手动复制下面的设定'}<em>回到聊天页,在输入框里粘贴并发送即可</em></h4>
+    <textarea readonly spellcheck="false">${esc(txt)}</textarea>
+    <div class="btns"><button class="btn go" data-cp="copy">再复制一次</button><button class="btn alt" data-cp="close">关闭</button></div></div>`;
+  box.addEventListener('click', async e => {
+    const b = e.target.closest('[data-cp]');
+    if (b && b.dataset.cp === 'copy') { const t = box.querySelector('textarea'); t.select(); AK.toast((await copyText(txt)) ? '已复制' : '请按 Ctrl+C 复制已选中的文字'); }
+    else if ((b && b.dataset.cp === 'close') || e.target === box) box.remove();
+  });
+  $('#v-char').appendChild(box);
+  const t = box.querySelector('textarea'); t.focus(); t.select();
 }
 function toAvatar(src, cors) {
   return new Promise((res, rej) => {
@@ -337,6 +398,7 @@ function onChange(e) {
   if (e.target.id === 'chFile') { onFile(e.target.files[0]); e.target.value = ''; return; }
   if (e.target.dataset && e.target.dataset.f === 'height') { let v = parseInt(e.target.value, 10) || 170; v = Math.max(120, Math.min(230, v)); draft.custom.height = v; e.target.value = v; persistDraft(); identSide(); updateHead(); }
   if (e.target.dataset && e.target.dataset.f === 'origin') { draft.custom.origin = e.target.value; persistDraft(); identSide(); updateHead(); }
+  if (e.target.dataset && e.target.dataset.f === 'timeline') { draft.custom.timeline = e.target.value; persistDraft(); identSide(); updateHead(); }
 }
 let inited = false;
 function init() {
