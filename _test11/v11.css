@@ -1604,6 +1604,11 @@
 /* 手机沉浸: 顶栏横向滚动, 舰名不许被挤成竖排 */
 .custom-styles .vn-slot:has(>.vn-tools .imm-t input:checked)>.hb .hb-ship{flex:none;white-space:nowrap;min-width:max-content}
 .custom-styles .vn-slot:has(>.vn-tools .imm-t input:checked)>.hb .hb-ship b,.custom-styles .vn-slot:has(>.vn-tools .imm-t input:checked)>.hb .hb-ship em{white-space:nowrap}
+@media (max-width:767px){
+  .custom-styles .vn-slot:has(>.vn-tools .imm-t input:checked)>.hb .hb-live{display:none}
+  .custom-styles .vn-slot:has(>.vn-tools .imm-t input:checked)>.hb .hb-chips{flex-wrap:nowrap;width:max-content;max-width:none;margin-left:0;align-items:stretch}
+  .custom-styles .vn-slot:has(>.vn-tools .imm-t input:checked)>.hb .hb-chips span{white-space:nowrap}
+}
 /* 沉浸抽屉跟着让位 */
 .custom-styles .rili-markdown-renderer:has(.vn-slot>.vn-tools .imm-t input:checked):has(.vn-slot>.vn-tools .imm-d input:checked) .dk{
   top:calc(var(--imm-top) + 8px);bottom:calc(var(--imm-bot) + 8px);right:10px;z-index:41}
