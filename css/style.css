@@ -1402,3 +1402,15 @@ body.mob #gcRes.one .gr-tag{top:38px;font-size:13px;padding:1px 10px}
 body.mob .gr-foot{bottom:24px}
 body.mob .gr-skip{right:12px;bottom:8px;font-size:10px}
 
+
+/* ===== 创造角色:保存后的"复制全部设定"弹层 ===== */
+.ch-copy{position:absolute;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.74);pointer-events:auto}
+.ch-cp{width:min(900px,92%);max-height:90%;display:flex;flex-direction:column;gap:14px;padding:22px 26px;background:#0d1319;border:1px solid rgba(255,255,255,.16);border-top:3px solid var(--cyan)}
+.ch-cp h4{margin:0;font:800 22px var(--sans);letter-spacing:.06em;color:#fff;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px}
+.ch-cp h4 em{font:500 14px var(--sans);font-style:normal;color:#8fb7c7;letter-spacing:.04em}
+.ch-cp textarea{flex:1;min-height:300px;width:100%;box-sizing:border-box;resize:none;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.18);color:#e8f0f5;font:500 15px/1.75 var(--sans);padding:14px 16px;outline:none;user-select:text;-webkit-user-select:text}
+.ch-cp .btns{display:flex;gap:12px;justify-content:flex-end}
+body.mob .ch-cp{padding:14px 14px;gap:10px;width:94%}
+body.mob .ch-cp h4{font-size:16px}
+body.mob .ch-cp h4 em{font-size:12px}
+body.mob .ch-cp textarea{min-height:200px;font-size:13px;line-height:1.65}
