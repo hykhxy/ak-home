@@ -1528,7 +1528,9 @@
 .custom-styles .hb:has(.imm-m input:checked) .stg .sl.end .ed b{font-size:14px;letter-spacing:.4em;color:#8fa6b3}
 .custom-styles .hb:has(.imm-m input:checked) .stg .sl.end .ed em{display:none}
 /* 沉浸 + 直接出文: 面板内部滚动 */
-.custom-styles .hb:has(.imm-t input:checked):has(.imm-m input:checked) .hb-main{overflow-y:auto}
+.custom-styles .hb:has(.imm-t input:checked):has(.imm-m input:checked) .hb-main{overflow-y:auto;overflow-x:hidden}
+.custom-styles .hb:has(.imm-m input:checked) .hb-menu,.custom-styles .hb:has(.imm-m input:checked) .hb-card.story,.custom-styles .hb:has(.imm-m input:checked) .stg{min-width:0;max-width:100%;overflow-x:hidden}
+.custom-styles .hb:has(.imm-m input:checked) .stg .sl{max-width:100%;overflow-x:hidden}
 @media (max-width:760px){
   .custom-styles .hb:has(.imm-m input:checked) .hb-menu{padding:10px 10px 20px}
   .custom-styles .hb:has(.imm-m input:checked) .stg .sl-say .art{width:42px;height:42px}
