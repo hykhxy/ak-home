@@ -1587,8 +1587,8 @@
 .custom-styles div:has(.vn-slot){contain:none!important;content-visibility:visible!important}
 
 /* 沉浸层避开平台顶栏(电脑 64 / 手机 48)和左侧栏(电脑 48), 底部让出「输入框 + 按钮条」 */
-.custom-styles .vn-slot{--imm-top:64px;--imm-left:48px;--imm-bot:208px}
-@media (max-width:767px){.custom-styles .vn-slot{--imm-top:48px;--imm-left:0px;--imm-bot:190px}}
+.custom-styles div:has(.vn-slot){--imm-top:64px;--imm-left:48px;--imm-bot:208px}
+@media (max-width:767px){.custom-styles div:has(.vn-slot){--imm-top:48px;--imm-left:0px;--imm-bot:190px}}
 .custom-styles .vn-slot:has(>.vn-tools .imm-t input:checked)>.hb{top:var(--imm-top);left:var(--imm-left);bottom:var(--imm-bot);right:0;z-index:40}
 
 /* 沉浸 / 切换 / 档案舱按钮: 固定在输入框正上方(沉浸中也在输入框上方, 不再盖住输入框) */
